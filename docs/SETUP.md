@@ -20,3 +20,14 @@ npx prisma generate
 ```
 
 El primer comando aplica las migraciones y crea la base de datos. El segundo genera el cliente de Prisma en `node_modules`. Luego podrás usarlo en la aplicación.
+
+## Variables de entorno para autenticación
+
+Para acceder al panel de administración necesitas definir un usuario y contraseña. Agrega en el archivo `.env` las siguientes variables:
+
+```
+ADMIN_USER=admin
+ADMIN_PASS=secret
+```
+
+Puedes cambiar los valores según prefieras.
