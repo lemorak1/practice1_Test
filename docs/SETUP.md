@@ -25,8 +25,4 @@ This document walks through the initial steps to run the Next.js real estate exa
    ```
 
 The application should be available at `http://localhost:3000`.
-eslint.config.js
-Nuevo
-+7
--0
 
