@@ -1,44 +1,40 @@
-# React Vite Template
+# Real Estate MVP Example
 
-This project is a minimal setup using [Vite](https://vitejs.dev/) with React and TypeScript.
-It includes a small example component (`ModelDesigner`) that renders a rotating 3D box using
-`@react-three/fiber` and `@react-three/drei`.
+This repository contains two sample projects:
 
-## Requirements
+1. `realstate-mvp/` – a **Next.js** application demonstrating a simple real estate listing CRUD with PostgreSQL (via Prisma) and Firebase for image uploads. It includes a minimal language switcher (English/Spanish).
+2. The root Vite project used previously for small Three.js demos.
 
-- Node.js 18 or later
-- [pnpm](https://pnpm.io/) package manager
+See [docs/SETUP.md](docs/SETUP.md) for a step-by-step guide to run the Next.js example.
 
-## Getting Started
+## Getting Started with the Next.js app
 
-Install dependencies and start the development server:
+```bash
+cd realstate-mvp
+npm install
+# copy environment variables template
+cp .env.example .env.local
+```
+
+Edit `.env.local` with your PostgreSQL connection string and Firebase
+credentials. Then run the initial database migration:
+
+```bash
+npx prisma migrate dev --name init
+```
+
+Finally start the development server:
+
+```bash
+npm run dev
+```
+
+The app exposes API routes under `/api/properties` and pages to list, create and edit properties.
+
+## Root Vite project
+
+The original Vite React sample remains in the repo. Run it with:
 
 ```bash
 pnpm install
 pnpm dev
-```
-
-To create a production build:
-
-```bash
-pnpm build
-```
-
-Preview the build locally:
-
-```bash
-pnpm preview
-```
-
-The application entry point is `src/main.tsx`. React components live under `src/`. The
-`ModelDesigner` component demonstrates basic usage of Three.js within React.
-
-## Additional Notes
-
-This repository previously contained a separate Create React App project in the
-`practice1_test` folder. That directory has been removed to keep the codebase focused on
-Vite. If you need a CRA example, check the commit history.
-
-## License
-
-This project is licensed under the [MIT License](./LICENSE).
