@@ -1,30 +1,44 @@
-# React + TypeScript + Vite
+# React Vite Template
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a minimal setup using [Vite](https://vitejs.dev/) with React and TypeScript.
+It includes a small example component (`ModelDesigner`) that renders a rotating 3D box using
+`@react-three/fiber` and `@react-three/drei`.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js 18 or later
+- [pnpm](https://pnpm.io/) package manager
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Install dependencies and start the development server:
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-    project: ["./tsconfig.json", "./tsconfig.node.json"],
-    tsconfigRootDir: __dirname,
-  },
-};
+```bash
+pnpm install
+pnpm dev
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+To create a production build:
+
+```bash
+pnpm build
+```
+
+Preview the build locally:
+
+```bash
+pnpm preview
+```
+
+The application entry point is `src/main.tsx`. React components live under `src/`. The
+`ModelDesigner` component demonstrates basic usage of Three.js within React.
+
+## Additional Notes
+
+This repository previously contained a separate Create React App project in the
+`practice1_test` folder. That directory has been removed to keep the codebase focused on
+Vite. If you need a CRA example, check the commit history.
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).
