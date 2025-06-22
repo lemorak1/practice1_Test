@@ -1,33 +1,58 @@
-# Configuración de Prisma
+# Configuración de la aplicación
 
-1. Instala las dependencias en la carpeta `realstate-mvp`:
+Este proyecto incluye una API construida con Next.js ubicada en la carpeta `realstate-mvp`. Utiliza Prisma y SQLite por defecto.
+
+## Requisitos previos
+
+- Node.js 18 o superior
+- npm
+
+## Instalación de dependencias
+
+1. Abre una terminal dentro de `realstate-mvp` y ejecuta:
 
 ```bash
 npm install
 ```
 
-2. Crea el archivo `.env` dentro de `realstate-mvp` con la variable `DATABASE_URL` apuntando a tu base de datos. Por ejemplo para SQLite:
+Esto descargará todas las dependencias necesarias para la API.
 
-```
+## Variables de entorno
+
+Crea un archivo `.env` en `realstate-mvp` definiendo la conexión a la base de datos y las credenciales de acceso al panel de administración:
+
+```bash
 DATABASE_URL="file:./dev.db"
+ADMIN_USER=admin
+ADMIN_PASS=secret
 ```
 
-3. Ejecuta las migraciones y genera el cliente Prisma:
+Puedes modificar los valores según tus necesidades. Si usas otro motor de base de datos, ajusta `DATABASE_URL` en consecuencia.
+
+## Inicializar Prisma
+
+Ejecuta las migraciones y genera el cliente Prisma con los siguientes comandos:
 
 ```bash
 npx prisma migrate dev --name init
 npx prisma generate
 ```
 
-El primer comando aplica las migraciones y crea la base de datos. El segundo genera el cliente de Prisma en `node_modules`. Luego podrás usarlo en la aplicación.
+El primer comando aplica las migraciones creando la base de datos y el segundo genera el cliente en `node_modules`.
 
-## Variables de entorno para autenticación
+## Comandos útiles
 
-Para acceder al panel de administración necesitas definir un usuario y contraseña. Agrega en el archivo `.env` las siguientes variables:
+- Iniciar el entorno de desarrollo:
 
+```bash
+npm run dev
 ```
-ADMIN_USER=admin
-ADMIN_PASS=secret
+
+- Crear una versión optimizada para producción:
+
+```bash
+npm run build
+npm run start
 ```
 
-Puedes cambiar los valores según prefieras.
+Esto compilará la aplicación y la iniciará en modo producción.
