@@ -35,4 +35,3 @@ otherwise run the SQL in
 
 When setting `FIREBASE_PRIVATE_KEY`, wrap the value in quotes and replace
 newlines with `\n` so it loads correctly.
-
