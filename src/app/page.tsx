@@ -28,8 +28,18 @@ export default function HomePage() {
 
     fetch(`/api/properties?${params.toString()}`)
       .then((res) => res.json())
-      .then(setProperties)
-      .catch(console.error);
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setProperties(data);
+        } else {
+          console.error('Failed to fetch properties', data);
+          setProperties([]);
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching properties', err);
+        setProperties([]);
+      });
   }, [search, city, county, minPrice, maxPrice, beds, baths]);
 
   return (

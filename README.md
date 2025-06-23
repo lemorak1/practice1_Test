@@ -14,8 +14,6 @@ A simple navigation bar links to the Home and Admin sections and lets users swit
 
 # copy environment variables template
 
-
-
 cp .env.example .env
 # edit `.env` and set `DB_PROVIDER` to either `supabase` or `firebase`
 # then fill in the remaining connection details, including the
