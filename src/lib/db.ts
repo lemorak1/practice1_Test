@@ -15,20 +15,72 @@ export interface Property {
   wholesalers?: { id: number; name: string }[];
 }
 
-const provider = process.env.DB_PROVIDER;
+let provider = process.env.DB_PROVIDER;
+if (provider !== 'supabase' && provider !== 'firebase') {
+  console.warn(
+    `Unknown DB_PROVIDER "${provider}", defaulting to "supabase".`,
+  );
+  provider = 'supabase';
+}
 
 let supabase: SupabaseClient | null = null;
 let pool: Pool | null = null;
+let initPromise: Promise<void> | null = null;
 
 if (provider === 'supabase') {
   const url = process.env.SUPABASE_URL as string;
   const key = process.env.SUPABASE_ANON_KEY as string;
   supabase = createClient(url, key);
+  if (process.env.DATABASE_URL) {
+    pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  }
 } else if (provider === 'firebase') {
   pool = new Pool({ connectionString: process.env.DATABASE_URL });
 }
 
+async function ensureTables() {
+  if (!pool) {
+    console.warn('DATABASE_URL not configured; skipping table check');
+    return;
+  }
+  const sql = `
+    CREATE TABLE IF NOT EXISTS "Property" (
+      id serial PRIMARY KEY,
+      address text NOT NULL,
+      city text,
+      state text,
+      zip text,
+      county text,
+      price numeric,
+      beds integer,
+      baths numeric
+    );
+    CREATE TABLE IF NOT EXISTS "Photo" (
+      id serial PRIMARY KEY,
+      url text NOT NULL,
+      "propertyId" integer REFERENCES "Property"(id) ON DELETE SET NULL
+    );
+    CREATE TABLE IF NOT EXISTS "Wholesaler" (
+      id serial PRIMARY KEY,
+      name text NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS "_PropertyWholesalers" (
+      "A" integer REFERENCES "Property"(id) ON DELETE CASCADE,
+      "B" integer REFERENCES "Wholesaler"(id) ON DELETE CASCADE,
+      PRIMARY KEY ("A", "B")
+    );
+  `;
+  await pool.query(sql);
+}
+
+if (pool) {
+  initPromise = ensureTables().catch((err) => {
+    console.error('Failed to initialize database tables:', err);
+  });
+}
+
 export async function getProperties(filters: any = {}): Promise<Property[]> {
+  if (initPromise) await initPromise;
   if (provider === 'supabase') {
     let query = supabase!
       .from('Property')
@@ -92,6 +144,7 @@ export async function getProperties(filters: any = {}): Promise<Property[]> {
 }
 
 export async function getPropertyById(id: number): Promise<Property | null> {
+  if (initPromise) await initPromise;
   if (provider === 'supabase') {
     const { data, error } = await supabase!
       .from('Property')
@@ -112,6 +165,7 @@ export async function getPropertyById(id: number): Promise<Property | null> {
 }
 
 export async function createProperty(data: Partial<Property>): Promise<Property> {
+  if (initPromise) await initPromise;
   if (provider === 'supabase') {
     const { data: prop, error } = await supabase!
       .from('Property')
@@ -148,6 +202,7 @@ export async function createProperty(data: Partial<Property>): Promise<Property>
 }
 
 export async function updateProperty(id: number, data: Partial<Property>): Promise<Property> {
+  if (initPromise) await initPromise;
   if (provider === 'supabase') {
     const { data: prop, error } = await supabase!
       .from('Property')
@@ -171,6 +226,7 @@ export async function updateProperty(id: number, data: Partial<Property>): Promi
 }
 
 export async function deleteProperty(id: number): Promise<void> {
+  if (initPromise) await initPromise;
   if (provider === 'supabase') {
     const { error } = await supabase!
       .from('Property')
@@ -183,6 +239,7 @@ export async function deleteProperty(id: number): Promise<void> {
 }
 
 export async function createPhoto(data: { url: string; propertyId?: number }): Promise<any> {
+  if (initPromise) await initPromise;
   if (provider === 'supabase') {
     const { data: photo, error } = await supabase!
       .from('Photo')
