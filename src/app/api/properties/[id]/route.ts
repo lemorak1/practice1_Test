@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
-import prisma from '../../../../lib/prisma';
+import {
+  getPropertyById,
+  updateProperty,
+  deleteProperty,
+} from '../../../../lib/db';
 
 export async function GET(request: Request, { params }: any) {
   const id = Number(params.id);
   try {
-    const property = await prisma.property.findUnique({
-      where: { id },
-      include: { photos: true, wholesalers: true },
-    });
+    const property = await getPropertyById(id);
     if (!property) {
       return NextResponse.json({ error: 'Property not found' }, { status: 404 });
     }
@@ -32,9 +33,15 @@ export async function PUT(request: Request, { params }: any) {
       beds,
       baths,
     } = data;
-    const property = await prisma.property.update({
-      where: { id },
-      data: { address, city, state, zip, county, price, beds, baths },
+    const property = await updateProperty(id, {
+      address,
+      city,
+      state,
+      zip,
+      county,
+      price,
+      beds,
+      baths,
     });
     return NextResponse.json(property);
   } catch (error) {
@@ -46,7 +53,7 @@ export async function PUT(request: Request, { params }: any) {
 export async function DELETE(request: Request, { params }: any) {
   const id = Number(params.id);
   try {
-    await prisma.property.delete({ where: { id } });
+    await deleteProperty(id);
     return NextResponse.json({});
   } catch (error) {
     console.error(error);

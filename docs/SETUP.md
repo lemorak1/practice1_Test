@@ -1,6 +1,6 @@
 # Configuración de la aplicación
 
-Este proyecto incluye una API construida con Next.js ubicada en la carpeta `realstate-mvp`. Utiliza Prisma y SQLite por defecto.
+Este proyecto incluye una API construida con Next.js ubicada en la carpeta `realstate-mvp`. Puedes usar Supabase o Firebase Data Connect (PostgreSQL) definiendo la variable `DB_PROVIDER`.
 
 ## Requisitos previos
 
@@ -19,26 +19,18 @@ Esto descargará todas las dependencias necesarias para la API.
 
 ## Variables de entorno
 
-Crea un archivo `.env` en `realstate-mvp` definiendo la conexión a la base de datos y las credenciales de acceso al panel de administración:
+Crea un archivo `.env` en `realstate-mvp` con la siguiente estructura:
 
 ```bash
-DATABASE_URL="file:./dev.db"
+DB_PROVIDER=supabase   # o "firebase"
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+DATABASE_URL=
 ADMIN_USER=admin
 ADMIN_PASS=secret
 ```
 
-Puedes modificar los valores según tus necesidades. Si usas otro motor de base de datos, ajusta `DATABASE_URL` en consecuencia.
-
-## Inicializar Prisma
-
-Ejecuta las migraciones y genera el cliente Prisma con los siguientes comandos:
-
-```bash
-npx prisma migrate dev --name init
-npx prisma generate
-```
-
-El primer comando aplica las migraciones creando la base de datos y el segundo genera el cliente en `node_modules`.
+Completa las variables de acuerdo al proveedor que elijas.
 
 ## Comandos útiles
 

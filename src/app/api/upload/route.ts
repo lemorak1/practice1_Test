@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
-import prisma from '../../../lib/prisma';
+import { createPhoto } from '../../../lib/db';
 
 export async function POST(request: Request) {
   const formData = await request.formData();
@@ -19,6 +19,6 @@ export async function POST(request: Request) {
   const url = `/uploads/${filename}`;
   const data: any = { url };
   if (propertyId) data.propertyId = Number(propertyId);
-  const photo = await prisma.photo.create({ data });
+  const photo = await createPhoto(data);
   return NextResponse.json(photo, { status: 201 });
 }
