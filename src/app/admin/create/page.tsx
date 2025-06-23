@@ -14,6 +14,7 @@ export default function CreatePropertyPage() {
   const [price, setPrice] = useState('');
   const [beds, setBeds] = useState('');
   const [baths, setBaths] = useState('');
+  const [files, setFiles] = useState<FileList | null>(null);
 
   if (status === 'loading') return <p>Loading...</p>;
   if (!session) {
@@ -43,7 +44,18 @@ export default function CreatePropertyPage() {
         baths: baths ? parseFloat(baths) : null,
       }),
     });
-    if (res.ok) router.push('/');
+    if (res.ok) {
+      const property = await res.json();
+      if (files) {
+        for (const file of Array.from(files)) {
+          const fd = new FormData();
+          fd.append('file', file);
+          fd.append('propertyId', property.id.toString());
+          await fetch('/api/upload', { method: 'POST', body: fd });
+        }
+      }
+      router.push('/');
+    }
   }
 
   return (
@@ -101,6 +113,12 @@ export default function CreatePropertyPage() {
           step="0.5"
           value={baths}
           onChange={(e) => setBaths(e.target.value)}
+        />
+        <input
+          className="border p-2"
+          type="file"
+          multiple
+          onChange={(e) => setFiles(e.target.files)}
         />
         <button className="bg-blue-500 text-white p-2" type="submit">
           Save
