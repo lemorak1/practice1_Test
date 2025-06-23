@@ -14,6 +14,7 @@ export default function EditPropertyPage({ params }: any) {
   const [price, setPrice] = useState('');
   const [beds, setBeds] = useState('');
   const [baths, setBaths] = useState('');
+  const [files, setFiles] = useState<FileList | null>(null);
 
   useEffect(() => {
     fetch(`/api/properties/${params.id}`)
@@ -44,7 +45,7 @@ export default function EditPropertyPage({ params }: any) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    await fetch(`/api/properties/${params.id}`, {
+    const res = await fetch(`/api/properties/${params.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -58,7 +59,17 @@ export default function EditPropertyPage({ params }: any) {
         baths: baths ? parseFloat(baths) : null,
       }),
     });
-    router.push(`/${params.id}`);
+    if (res.ok) {
+      if (files) {
+        for (const file of Array.from(files)) {
+          const fd = new FormData();
+          fd.append('file', file);
+          fd.append('propertyId', params.id);
+          await fetch('/api/upload', { method: 'POST', body: fd });
+        }
+      }
+      router.push(`/${params.id}`);
+    }
   }
 
   return (
@@ -115,6 +126,12 @@ export default function EditPropertyPage({ params }: any) {
           step="0.5"
           value={baths}
           onChange={(e) => setBaths(e.target.value)}
+        />
+        <input
+          className="border p-2"
+          type="file"
+          multiple
+          onChange={(e) => setFiles(e.target.files)}
         />
         <button className="bg-blue-500 text-white p-2" type="submit">
           Update
