@@ -17,6 +17,9 @@ This Next.js application provides a minimal real estate listing platform. Listin
 
 # start the development server
  npm run dev
+
+# for faster hot reload, you can try the experimental turbopack-based server
+ npm run dev:turbo
 ```
 
 For complete setup instructions and environment variable details see [docs/SETUP.md](docs/SETUP.md).
