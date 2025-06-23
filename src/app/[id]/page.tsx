@@ -4,6 +4,7 @@ import type { Property } from '../types';
 import PhotoCarousel from '../components/PhotoCarousel';
 import { loadLocalProperties } from '../../lib/localProperties';
 
+
 export default function PropertyPage({ params }: any) {
   const id = Number(params.id);
   const [property, setProperty] = useState<Property | null>(null);
@@ -33,6 +34,7 @@ export default function PropertyPage({ params }: any) {
       <h1 className="text-2xl font-bold mb-4">{property.address}</h1>
       <div className="grid gap-6 md:grid-cols-2">
         <PhotoCarousel urls={property.photos?.map((p) => p.url) ?? []} />
+
         <div className="space-y-2">
           <p>
             {[property.city, property.state, property.zip]
@@ -43,6 +45,7 @@ export default function PropertyPage({ params }: any) {
           {property.price && (
             <p className="font-semibold">Price: ${property.price}</p>
           )}
+
           {property.beds != null && <p>Beds: {property.beds}</p>}
           {property.baths != null && <p>Baths: {property.baths}</p>}
 
