@@ -1,39 +1,36 @@
 import { NextResponse } from 'next/server';
-import prisma from '../../../lib/prisma';
+import {
+  getProperties,
+  createProperty,
+} from '../../../lib/db';
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
 
-    const where: any = {};
+    const filters: any = {};
 
     const address = searchParams.get('address');
-    if (address) where.address = { contains: address, mode: 'insensitive' };
+    if (address) filters.address = address;
 
     const city = searchParams.get('city');
-    if (city) where.city = { contains: city, mode: 'insensitive' };
+    if (city) filters.city = city;
 
     const county = searchParams.get('county');
-    if (county) where.county = { contains: county, mode: 'insensitive' };
+    if (county) filters.county = county;
 
     const minPrice = parseInt(searchParams.get('minPrice') || '');
     const maxPrice = parseInt(searchParams.get('maxPrice') || '');
-    if (!isNaN(minPrice) || !isNaN(maxPrice)) {
-      where.price = {};
-      if (!isNaN(minPrice)) where.price.gte = minPrice;
-      if (!isNaN(maxPrice)) where.price.lte = maxPrice;
-    }
+    if (!isNaN(minPrice)) filters.minPrice = minPrice;
+    if (!isNaN(maxPrice)) filters.maxPrice = maxPrice;
 
     const beds = parseInt(searchParams.get('beds') || '');
-    if (!isNaN(beds)) where.beds = { gte: beds };
+    if (!isNaN(beds)) filters.beds = beds;
 
     const baths = parseFloat(searchParams.get('baths') || '');
-    if (!isNaN(baths)) where.baths = { gte: baths };
+    if (!isNaN(baths)) filters.baths = baths;
 
-    const properties = await prisma.property.findMany({
-      where,
-      include: { photos: true, wholesalers: true },
-    });
+    const properties = await getProperties(filters);
     return NextResponse.json(properties);
   } catch (error) {
     console.error(error);
@@ -54,8 +51,15 @@ export async function POST(request: Request) {
       beds,
       baths,
     } = data;
-    const property = await prisma.property.create({
-      data: { address, city, state, zip, county, price, beds, baths },
+    const property = await createProperty({
+      address,
+      city,
+      state,
+      zip,
+      county,
+      price,
+      beds,
+      baths,
     });
     return NextResponse.json(property, { status: 201 });
   } catch (error) {
