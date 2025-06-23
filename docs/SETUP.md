@@ -22,7 +22,8 @@ Esto descargará todas las dependencias necesarias para la API.
 Crea un archivo `.env` en `realstate-mvp` con la siguiente estructura:
 
 ```bash
-DB_PROVIDER=supabase   # o "firebase"
+# Escoge el proveedor de base de datos ("supabase" o "firebase")
+DB_PROVIDER=supabase
 SUPABASE_URL=
 SUPABASE_ANON_KEY=
 DATABASE_URL=
@@ -38,6 +39,11 @@ Completa las variables de acuerdo al proveedor que elijas.
 
 ```bash
 npm run dev
+```
+
+Para un recarga más rápida puedes usar el servidor experimental basado en Turbopack:
+```bash
+npm run dev:turbo
 ```
 
 - Crear una versión optimizada para producción:
