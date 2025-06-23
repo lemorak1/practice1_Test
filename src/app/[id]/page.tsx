@@ -1,14 +1,11 @@
 import { notFound } from 'next/navigation';
 import type { Property } from '../types';
-
-async function getProperty(id: string): Promise<Property | null> {
-  const res = await fetch(`/api/properties/${id}`, { cache: 'no-store' });
-  if (!res.ok) return null;
-  return res.json();
-}
+import { getPropertyById } from '../../lib/db';
 
 export default async function PropertyPage({ params }: any) {
-  const property = await getProperty(params.id);
+  const id = Number(params.id);
+  if (isNaN(id)) notFound();
+  const property = await getPropertyById(id);
   if (!property) notFound();
 
   return (

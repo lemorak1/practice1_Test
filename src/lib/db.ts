@@ -15,27 +15,43 @@ export interface Property {
   wholesalers?: { id: number; name: string }[];
 }
 
-let provider = process.env.DB_PROVIDER;
-if (provider !== 'supabase' && provider !== 'firebase') {
-  console.warn(
-    `Unknown DB_PROVIDER "${provider}", defaulting to "supabase".`,
-  );
-  provider = 'supabase';
-}
-
+let provider: string | undefined;
 let supabase: SupabaseClient | null = null;
 let pool: Pool | null = null;
 let initPromise: Promise<void> | null = null;
+let initialized = false;
 
-if (provider === 'supabase') {
-  const url = process.env.SUPABASE_URL as string;
-  const key = process.env.SUPABASE_ANON_KEY as string;
-  supabase = createClient(url, key);
-  if (process.env.DATABASE_URL) {
-    pool = new Pool({ connectionString: process.env.DATABASE_URL });
+function init() {
+  if (initialized) return;
+  provider = process.env.DB_PROVIDER;
+  if (provider !== 'supabase' && provider !== 'firebase') {
+    console.warn(
+      `Unknown DB_PROVIDER "${provider}", defaulting to "supabase".`,
+    );
+    provider = 'supabase';
   }
-} else if (provider === 'firebase') {
-  pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+  if (provider === 'supabase') {
+    const url = process.env.SUPABASE_URL as string | undefined;
+    const key = process.env.SUPABASE_ANON_KEY as string | undefined;
+    if (url && key) {
+      supabase = createClient(url, key);
+    }
+    if (process.env.DATABASE_URL) {
+      pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    }
+  } else if (provider === 'firebase') {
+    if (process.env.DATABASE_URL) {
+      pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    }
+  }
+
+  if (pool) {
+    initPromise = ensureTables().catch((err) => {
+      console.error('Failed to initialize database tables:', err);
+    });
+  }
+  initialized = true;
 }
 
 async function ensureTables() {
@@ -73,13 +89,9 @@ async function ensureTables() {
   await pool.query(sql);
 }
 
-if (pool) {
-  initPromise = ensureTables().catch((err) => {
-    console.error('Failed to initialize database tables:', err);
-  });
-}
 
 export async function getProperties(filters: any = {}): Promise<Property[]> {
+  init();
   if (initPromise) await initPromise;
   if (provider === 'supabase') {
     let query = supabase!
@@ -144,6 +156,7 @@ export async function getProperties(filters: any = {}): Promise<Property[]> {
 }
 
 export async function getPropertyById(id: number): Promise<Property | null> {
+  init();
   if (initPromise) await initPromise;
   if (provider === 'supabase') {
     const { data, error } = await supabase!
@@ -165,6 +178,7 @@ export async function getPropertyById(id: number): Promise<Property | null> {
 }
 
 export async function createProperty(data: Partial<Property>): Promise<Property> {
+  init();
   if (initPromise) await initPromise;
   if (provider === 'supabase') {
     const { data: prop, error } = await supabase!
@@ -202,6 +216,7 @@ export async function createProperty(data: Partial<Property>): Promise<Property>
 }
 
 export async function updateProperty(id: number, data: Partial<Property>): Promise<Property> {
+  init();
   if (initPromise) await initPromise;
   if (provider === 'supabase') {
     const { data: prop, error } = await supabase!
@@ -226,6 +241,7 @@ export async function updateProperty(id: number, data: Partial<Property>): Promi
 }
 
 export async function deleteProperty(id: number): Promise<void> {
+  init();
   if (initPromise) await initPromise;
   if (provider === 'supabase') {
     const { error } = await supabase!
@@ -239,6 +255,7 @@ export async function deleteProperty(id: number): Promise<void> {
 }
 
 export async function createPhoto(data: { url: string; propertyId?: number }): Promise<any> {
+  init();
   if (initPromise) await initPromise;
   if (provider === 'supabase') {
     const { data: photo, error } = await supabase!
