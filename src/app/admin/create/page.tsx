@@ -2,9 +2,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession, signIn } from 'next-auth/react';
+import { saveLocalProperty } from '../../../lib/localProperties';
 
 export default function CreatePropertyPage() {
   const { data: session, status } = useSession();
+  const isAdmin = session?.user?.name === 'Admin';
   const router = useRouter();
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
@@ -30,32 +32,57 @@ export default function CreatePropertyPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const res = await fetch('/api/properties', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        address,
-        city,
-        state: stateVal,
-        zip,
-        county,
-        price: price ? Number(price) : null,
-        beds: beds ? Number(beds) : null,
-        baths: baths ? parseFloat(baths) : null,
-      }),
-    });
-    if (res.ok) {
-      const property = await res.json();
-      if (files) {
-        for (const file of Array.from(files)) {
-          const fd = new FormData();
-          fd.append('file', file);
-          fd.append('propertyId', property.id.toString());
-          await fetch('/api/upload', { method: 'POST', body: fd });
+    if (!isAdmin) return;
+    const payload = {
+      address,
+      city,
+      state: stateVal,
+      zip,
+      county,
+      price: price ? Number(price) : null,
+      beds: beds ? Number(beds) : null,
+      baths: baths ? parseFloat(baths) : null,
+    };
+    let created: any = null;
+    let photos: { id: number; url: string }[] = [];
+    try {
+      const res = await fetch('/api/properties', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        created = await res.json();
+      }
+    } catch {
+      // ignore network errors
+    }
+    if (!created) {
+      created = { id: Date.now(), ...payload };
+    }
+    if (files) {
+      for (const file of Array.from(files)) {
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('propertyId', created.id.toString());
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: fd,
+          });
+          if (res.ok) {
+            const photo = await res.json();
+            photos.push({ id: photo.id, url: photo.url });
+          }
+        } catch {
+          // ignore upload errors
         }
       }
-      router.push('/');
     }
+    if (photos.length) created.photos = photos;
+
+    saveLocalProperty(created);
+    router.push('/');
   }
 
   return (
@@ -123,12 +150,14 @@ export default function CreatePropertyPage() {
           multiple
           onChange={(e) => setFiles(e.target.files)}
         />
-        <button
-          className="bg-blue-500 text-white p-2 md:col-span-2"
-          type="submit"
-        >
-          Save
-        </button>
+        {isAdmin && (
+          <button
+            className="bg-blue-500 text-white p-2 md:col-span-2"
+            type="submit"
+          >
+            Save
+          </button>
+        )}
       </form>
     </main>
   );

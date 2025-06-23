@@ -1,10 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { loadLocalProperties } from '../lib/localProperties';
+import { useTranslation } from 'react-i18next';
 import type { Property } from './types';
+import PropertyCard from './components/PropertyCard';
 
 export default function HomePage() {
+  const { t } = useTranslation();
   const [properties, setProperties] = useState<Property[]>([]);
   const [search, setSearch] = useState('');
   const [city, setCity] = useState('');
@@ -13,6 +16,10 @@ export default function HomePage() {
   const [maxPrice, setMaxPrice] = useState('');
   const [beds, setBeds] = useState('');
   const [baths, setBaths] = useState('');
+
+  useEffect(() => {
+    setProperties(loadLocalProperties());
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -26,13 +33,26 @@ export default function HomePage() {
 
     fetch(`/api/properties?${params.toString()}`)
       .then((res) => res.json())
-      .then(setProperties)
-      .catch(console.error);
+      .then((data) => {
+        if (Array.isArray(data)) {
+          const local = loadLocalProperties();
+          const merged = [...data];
+          for (const p of local) {
+            if (!merged.find((m) => m.id === p.id)) merged.push(p);
+          }
+          setProperties(merged);
+        } else {
+          console.error('Failed to fetch properties', data);
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching properties', err);
+      });
   }, [search, city, county, minPrice, maxPrice, beds, baths]);
 
   return (
     <main className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Properties</h1>
+      <h1 className="text-2xl font-bold mb-4">{t('title')}</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 max-w-xl">
         <input
           className="border p-2"
@@ -82,21 +102,9 @@ export default function HomePage() {
           onChange={(e) => setBaths(e.target.value)}
         />
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
         {properties.map((p) => (
-          <Link
-            key={p.id}
-            href={`/${p.id}`}
-            className="border rounded p-4 flex flex-col hover:shadow"
-          >
-            <h2 className="font-semibold">{p.address}</h2>
-            {(p.city || p.county) && (
-              <p className="text-sm text-gray-600">
-                {[p.city, p.county].filter(Boolean).join(', ')}
-              </p>
-            )}
-            {p.price && <p className="mt-1 font-semibold">${p.price}</p>}
-          </Link>
+          <PropertyCard key={p.id} property={p} />
         ))}
       </div>
     </main>
