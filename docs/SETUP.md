@@ -22,7 +22,8 @@ Esto descargará todas las dependencias necesarias para la API.
 Crea un archivo `.env` en `realstate-mvp` con la siguiente estructura:
 
 ```bash
-DB_PROVIDER=supabase   # o "firebase"
+# Escoge el proveedor de base de datos ("supabase" o "firebase")
+DB_PROVIDER=supabase
 SUPABASE_URL=
 SUPABASE_ANON_KEY=
 DATABASE_URL=

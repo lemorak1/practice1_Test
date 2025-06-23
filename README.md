@@ -13,7 +13,8 @@ This Next.js application provides a minimal real estate listing platform. Listin
 
 # copy environment variables template
  cp .env.example .env
-# edit .env and set `DB_PROVIDER` and connection details
+# edit `.env` and set `DB_PROVIDER` to either `supabase` or `firebase`
+# then fill in the remaining connection details
 
 # start the development server
  npm run dev
