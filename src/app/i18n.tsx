@@ -12,3 +12,4 @@ export default appWithTranslation(
   I18nProvider as any,
   nextI18NextConfig as any,
 ) as any;
+

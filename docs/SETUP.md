@@ -38,11 +38,16 @@ Completa las variables de acuerdo al proveedor que elijas.
 1. Crea un proyecto en [Supabase](https://supabase.com) y abre el apartado **SQL editor**.
 2. Ejecuta el archivo [`docs/supabase_schema.sql`](supabase_schema.sql) para crear las tablas necesarias.
 3. En **Project Settings → API** copia la **URL** y **anon key** y colócalas en `SUPABASE_URL` y `SUPABASE_ANON_KEY` respectivamente.
-4. Asegúrate de mantener vacía la variable `DATABASE_URL`.
+4. (Opcional) Si agregas la cadena de conexión de Postgres en `DATABASE_URL`, la
+   aplicación intentará crear las tablas automáticamente al iniciarse. De lo
+   contrario, ejecuta manualmente el script `supabase_schema.sql`.
 
 ### Firebase Data Connect
 
-Si prefieres usar Firebase Data Connect (PostgreSQL), establece `DB_PROVIDER=firebase` y coloca la cadena de conexión de tu instancia en `DATABASE_URL`. Las otras variables de Supabase pueden quedar vacías.
+Si prefieres usar Firebase Data Connect (PostgreSQL), establece
+`DB_PROVIDER=firebase` y coloca la cadena de conexión de tu instancia en
+`DATABASE_URL`. Las variables de Supabase pueden quedar vacías.
+
 
 ## Comandos útiles
 

@@ -3,8 +3,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'next-i18next';
-
-
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const i18nConfig = require('../../next-i18next.config.js');
 
