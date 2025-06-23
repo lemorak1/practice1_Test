@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-<<<<<<< HEAD
-=======
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
@@ -11,7 +9,6 @@ const nextConfig = {
     };
     return config;
   },
->>>>>>> origin/wcthwq-codex/revisar-y-desarrollar-webapp-inmobiliaria
 };
 
 module.exports = nextConfig;
