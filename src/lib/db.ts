@@ -15,7 +15,13 @@ export interface Property {
   wholesalers?: { id: number; name: string }[];
 }
 
-const provider = process.env.DB_PROVIDER;
+let provider = process.env.DB_PROVIDER;
+if (provider !== 'supabase' && provider !== 'firebase') {
+  console.warn(
+    `Unknown DB_PROVIDER "${provider}", defaulting to "supabase".`,
+  );
+  provider = 'supabase';
+}
 
 let supabase: SupabaseClient | null = null;
 let pool: Pool | null = null;

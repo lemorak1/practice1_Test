@@ -13,10 +13,14 @@ This Next.js application provides a minimal real estate listing platform. Listin
 
 # copy environment variables template
  cp .env.example .env
-# edit .env and set `DB_PROVIDER` and connection details
+# edit `.env` and set `DB_PROVIDER` to either `supabase` or `firebase`
+# then fill in the remaining connection details
 
 # start the development server
  npm run dev
+
+# for faster hot reload, you can try the experimental turbopack-based server
+ npm run dev:turbo
 ```
 
-For complete setup instructions and environment variable details see [docs/SETUP.md](docs/SETUP.md).
+For complete setup instructions and environment variable details see [docs/SETUP.md](docs/SETUP.md). That guide also explains how to create the necessary Supabase tables using [docs/supabase_schema.sql](docs/supabase_schema.sql).
