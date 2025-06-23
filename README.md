@@ -23,4 +23,8 @@ This Next.js application provides a minimal real estate listing platform. Listin
  npm run dev:turbo
 ```
 
-For complete setup instructions and environment variable details see [docs/SETUP.md](docs/SETUP.md). That guide also explains how to create the necessary Supabase tables using [docs/supabase_schema.sql](docs/supabase_schema.sql).
+For complete setup instructions and environment variable details see
+[docs/SETUP.md](docs/SETUP.md). If you provide a PostgreSQL connection string in
+`DATABASE_URL`, the app will attempt to create the required tables on first run;
+otherwise run the SQL in
+[docs/supabase_schema.sql](docs/supabase_schema.sql) manually.
