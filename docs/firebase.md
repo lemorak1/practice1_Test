@@ -22,5 +22,6 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 
 - **Firestore**: cada documento en la colecci\u00f3n `properties` representa una casa y contiene datos como el t\u00edtulo, descripci\u00f3n, precio, ubicaci\u00f3n y amenidades.
 - **Firebase Storage**: las im\u00e1genes de las propiedades se guardan en el bucket configurado en `storageBucket`. Cada documento de Firestore guarda la URL p\u00fablica de la foto en el campo `imageUrl`.
+Al usar el formulario de administración puedes subir una imagen y se almacenará en Firebase Storage. El campo `imageUrl` se rellenará automáticamente con la URL pública generada.
 
 Con esta configuraci\u00f3n podr\u00e1s realizar operaciones de crear, leer, actualizar y eliminar propiedades y sus fotos.

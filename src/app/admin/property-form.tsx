@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import type { Property } from '@/lib/types';
+import { uploadPropertyImage } from '@/lib/firebase';
 
 const formSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
@@ -193,8 +194,20 @@ export function PropertyForm({ property }: PropertyFormProps) {
 
             <FormField control={form.control} name="imageUrl" render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Image URL</FormLabel>
-                    <FormControl><Input placeholder="https://placehold.co/600x400.png" {...field} /></FormControl>
+                    <FormLabel>Property Image</FormLabel>
+                    <FormControl>
+                        <div className="space-y-2">
+                            <Input placeholder="https://placehold.co/600x400.png" {...field} />
+                            <Input type="file" accept="image/*" onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                    const url = await uploadPropertyImage(file);
+                                    form.setValue('imageUrl', url, { shouldValidate: true });
+                                }
+                            }} />
+                        </div>
+                    </FormControl>
+                    <FormDescription>Upload an image to store in Firebase Storage.</FormDescription>
                     <FormMessage />
                 </FormItem>
             )} />
