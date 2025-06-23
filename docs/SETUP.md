@@ -61,7 +61,6 @@ proporciona las credenciales del servicio de Firebase en `FIREBASE_PROJECT_ID`,
 `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY` y define `FIREBASE_STORAGE_BUCKET`
 para que las fotos se almacenen en Firebase Storage.
 
-
 ## Comandos útiles
 
 - Iniciar el entorno de desarrollo:
