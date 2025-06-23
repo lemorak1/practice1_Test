@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { AppProvider } from '@/context/app-provider';
-import { Toaster } from "@/components/ui/toaster";
-import { I18nProvider } from './i18n';
+import { Toaster } from "@/components/ui/toaster"
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -23,12 +22,10 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn("font-body antialiased", "min-h-screen bg-background font-sans")}>
-        <I18nProvider>
-          <AppProvider>
+        <AppProvider>
             {children}
             <Toaster />
-          </AppProvider>
-        </I18nProvider>
+        </AppProvider>
       </body>
     </html>
   );
