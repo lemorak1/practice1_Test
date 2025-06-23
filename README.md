@@ -17,6 +17,7 @@ cp .env.example .env
 # then fill in the remaining connection details, including the
 # Firebase service account data used for photo uploads
 
+
 # start the development server
  npm run dev
 
