@@ -5,6 +5,7 @@ import { useSession, signIn } from 'next-auth/react';
 
 export default function CreatePropertyPage() {
   const { data: session, status } = useSession();
+  const isAdmin = session?.user?.name === 'Admin';
   const router = useRouter();
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
@@ -123,12 +124,14 @@ export default function CreatePropertyPage() {
           multiple
           onChange={(e) => setFiles(e.target.files)}
         />
-        <button
-          className="bg-blue-500 text-white p-2 md:col-span-2"
-          type="submit"
-        >
-          Save
-        </button>
+        {isAdmin && (
+          <button
+            className="bg-blue-500 text-white p-2 md:col-span-2"
+            type="submit"
+          >
+            Save
+          </button>
+        )}
       </form>
     </main>
   );
