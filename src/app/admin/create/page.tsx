@@ -44,6 +44,7 @@ export default function CreatePropertyPage() {
       baths: baths ? parseFloat(baths) : null,
     };
     let created: any = null;
+    let photos: { id: number; url: string }[] = [];
     try {
       const res = await fetch('/api/properties', {
         method: 'POST',
@@ -64,9 +65,22 @@ export default function CreatePropertyPage() {
         const fd = new FormData();
         fd.append('file', file);
         fd.append('propertyId', created.id.toString());
-        await fetch('/api/upload', { method: 'POST', body: fd });
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: fd,
+          });
+          if (res.ok) {
+            const photo = await res.json();
+            photos.push({ id: photo.id, url: photo.url });
+          }
+        } catch {
+          // ignore upload errors
+        }
       }
     }
+    if (photos.length) created.photos = photos;
+
     saveLocalProperty(created);
     router.push('/');
   }

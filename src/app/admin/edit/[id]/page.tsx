@@ -59,6 +59,7 @@ export default function EditPropertyPage({ params }: any) {
       baths: baths ? parseFloat(baths) : null,
     };
     let updated: any = null;
+    let photos: { id: number; url: string }[] = [];
     try {
       const res = await fetch(`/api/properties/${params.id}`, {
         method: 'PUT',
@@ -79,8 +80,23 @@ export default function EditPropertyPage({ params }: any) {
         const fd = new FormData();
         fd.append('file', file);
         fd.append('propertyId', updated.id.toString());
-        await fetch('/api/upload', { method: 'POST', body: fd });
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: fd,
+          });
+          if (res.ok) {
+            const photo = await res.json();
+            photos.push({ id: photo.id, url: photo.url });
+          }
+        } catch {
+          // ignore upload errors
+        }
       }
+    }
+    if (photos.length) {
+      updated.photos = (updated.photos || []).concat(photos);
+
     }
     saveLocalProperty(updated);
     router.push(`/${params.id}`);
