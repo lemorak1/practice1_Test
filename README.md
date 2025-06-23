@@ -9,3 +9,4 @@ For detalles sobre conectar la aplicación a Firebase y cómo almacenar las foto
 Este proyecto incluye traducciones con `next-i18next`. Consulta el archivo
 `next-i18next.config.js` y las carpetas `public/locales` para modificar los
 textos en inglés y español.
+
