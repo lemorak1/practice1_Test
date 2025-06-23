@@ -8,6 +8,7 @@ import { useTranslation } from 'next-i18next';
 const i18nConfig = require('../../next-i18next.config.js');
 
 
+
 const { locales } = i18nConfig.i18n;
 
 export default function LanguageSwitcher() {
