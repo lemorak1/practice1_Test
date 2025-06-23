@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { loadLocalProperties } from '../lib/localProperties';
 import { useTranslation } from 'react-i18next';
 import type { Property } from './types';
 import PropertyCard from './components/PropertyCard';
@@ -17,6 +18,10 @@ export default function HomePage() {
   const [baths, setBaths] = useState('');
 
   useEffect(() => {
+    setProperties(loadLocalProperties());
+  }, []);
+
+  useEffect(() => {
     const params = new URLSearchParams();
     if (search) params.set('address', search);
     if (city) params.set('city', city);
@@ -30,15 +35,18 @@ export default function HomePage() {
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
-          setProperties(data);
+          const local = loadLocalProperties();
+          const merged = [...data];
+          for (const p of local) {
+            if (!merged.find((m) => m.id === p.id)) merged.push(p);
+          }
+          setProperties(merged);
         } else {
           console.error('Failed to fetch properties', data);
-          setProperties([]);
         }
       })
       .catch((err) => {
         console.error('Error fetching properties', err);
-        setProperties([]);
       });
   }, [search, city, county, minPrice, maxPrice, beds, baths]);
 

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession, signIn } from 'next-auth/react';
+import { saveLocalProperty } from '../../../lib/localProperties';
 
 export default function CreatePropertyPage() {
   const { data: session, status } = useSession();
@@ -31,32 +32,43 @@ export default function CreatePropertyPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const res = await fetch('/api/properties', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        address,
-        city,
-        state: stateVal,
-        zip,
-        county,
-        price: price ? Number(price) : null,
-        beds: beds ? Number(beds) : null,
-        baths: baths ? parseFloat(baths) : null,
-      }),
-    });
-    if (res.ok) {
-      const property = await res.json();
-      if (files) {
-        for (const file of Array.from(files)) {
-          const fd = new FormData();
-          fd.append('file', file);
-          fd.append('propertyId', property.id.toString());
-          await fetch('/api/upload', { method: 'POST', body: fd });
-        }
+    if (!isAdmin) return;
+    const payload = {
+      address,
+      city,
+      state: stateVal,
+      zip,
+      county,
+      price: price ? Number(price) : null,
+      beds: beds ? Number(beds) : null,
+      baths: baths ? parseFloat(baths) : null,
+    };
+    let created: any = null;
+    try {
+      const res = await fetch('/api/properties', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        created = await res.json();
       }
-      router.push('/');
+    } catch {
+      // ignore network errors
     }
+    if (!created) {
+      created = { id: Date.now(), ...payload };
+    }
+    if (files) {
+      for (const file of Array.from(files)) {
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('propertyId', created.id.toString());
+        await fetch('/api/upload', { method: 'POST', body: fd });
+      }
+    }
+    saveLocalProperty(created);
+    router.push('/');
   }
 
   return (
