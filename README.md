@@ -1,40 +1,25 @@
-# Real Estate MVP Example
+# Realstate MVP
 
-This repository contains two sample projects:
+This Next.js application provides a minimal real estate listing platform. Listings can be stored in either Supabase or Firebase Data Connect (PostgreSQL) depending on the `DB_PROVIDER` environment variable. The frontend lets users filter properties by location, price and bedrooms/bathrooms. Authenticated administrators can create, edit and delete listings and upload images through a simple dashboard. NextAuth handles sign‑in using credentials from environment variables, while next‑i18next enables localization support.
 
-1. `realstate-mvp/` – a **Next.js** application demonstrating a simple real estate listing CRUD with PostgreSQL (via Prisma) and Firebase for image uploads. It includes a minimal language switcher (English/Spanish).
-2. The root Vite project used previously for small Three.js demos.
-
-See [docs/SETUP.md](docs/SETUP.md) for a step-by-step guide to run the Next.js example.
-
-## Getting Started with the Next.js app
+## Quick start
 
 ```bash
-cd realstate-mvp
-npm install
+# clone the repository
+ git clone <repo-url> && cd realstate-mvp
+
+# install dependencies
+ npm install
+
 # copy environment variables template
-cp .env.example .env.local
+ cp .env.example .env
+# edit .env and set `DB_PROVIDER` and connection details
+
+# start the development server
+ npm run dev
+
+# for faster hot reload, you can try the experimental turbopack-based server
+ npm run dev:turbo
 ```
 
-Edit `.env.local` with your PostgreSQL connection string and Firebase
-credentials. Then run the initial database migration:
-
-```bash
-npx prisma migrate dev --name init
-```
-
-Finally start the development server:
-
-```bash
-npm run dev
-```
-
-The app exposes API routes under `/api/properties` and pages to list, create and edit properties.
-
-## Root Vite project
-
-The original Vite React sample remains in the repo. Run it with:
-
-```bash
-pnpm install
-pnpm dev
+For complete setup instructions and environment variable details see [docs/SETUP.md](docs/SETUP.md).
