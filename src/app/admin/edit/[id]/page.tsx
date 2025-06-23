@@ -140,7 +140,7 @@ export default function EditPropertyPage({ params }: any) {
           className="bg-blue-500 text-white p-2 md:col-span-2"
           type="submit"
         >
-          Update
+          Save
         </button>
       </form>
     </main>

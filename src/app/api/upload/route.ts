@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
 import { createPhoto } from '../../../lib/db';
+import { uploadBuffer } from '../../../lib/firebase';
 
 export async function POST(request: Request) {
   const formData = await request.formData();
@@ -12,11 +11,8 @@ export async function POST(request: Request) {
   const propertyId = formData.get('propertyId');
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
-  const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
-  await mkdir(uploadsDir, { recursive: true });
   const filename = `${Date.now()}-${file.name}`;
-  await writeFile(path.join(uploadsDir, filename), buffer);
-  const url = `/uploads/${filename}`;
+  const url = await uploadBuffer(buffer, filename, file.type);
   const data: any = { url };
   if (propertyId) data.propertyId = Number(propertyId);
   const photo = await createPhoto(data);
