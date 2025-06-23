@@ -61,7 +61,10 @@ export default function CreatePropertyPage() {
   return (
     <main className="p-4">
       <h1 className="text-2xl font-bold mb-4">Create Property</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2 max-w-sm">
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl"
+      >
         <input
           className="border p-2"
           placeholder="Address"
@@ -115,12 +118,15 @@ export default function CreatePropertyPage() {
           onChange={(e) => setBaths(e.target.value)}
         />
         <input
-          className="border p-2"
+          className="border p-2 md:col-span-2"
           type="file"
           multiple
           onChange={(e) => setFiles(e.target.files)}
         />
-        <button className="bg-blue-500 text-white p-2" type="submit">
+        <button
+          className="bg-blue-500 text-white p-2 md:col-span-2"
+          type="submit"
+        >
           Save
         </button>
       </form>
