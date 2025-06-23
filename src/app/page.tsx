@@ -33,7 +33,7 @@ export default function HomePage() {
   return (
     <main className="p-4">
       <h1 className="text-2xl font-bold mb-4">Properties</h1>
-      <div className="flex flex-col gap-2 mb-4 max-w-md">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 max-w-xl">
         <input
           className="border p-2"
           placeholder="Address"
@@ -82,13 +82,23 @@ export default function HomePage() {
           onChange={(e) => setBaths(e.target.value)}
         />
       </div>
-      <ul className="list-disc pl-5">
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
         {properties.map((p) => (
-          <li key={p.id} className="mb-2">
-            <Link href={`/${p.id}`}>{p.address}</Link>
-          </li>
+          <Link
+            key={p.id}
+            href={`/${p.id}`}
+            className="border rounded p-4 flex flex-col hover:shadow"
+          >
+            <h2 className="font-semibold">{p.address}</h2>
+            {(p.city || p.county) && (
+              <p className="text-sm text-gray-600">
+                {[p.city, p.county].filter(Boolean).join(', ')}
+              </p>
+            )}
+            {p.price && <p className="mt-1 font-semibold">${p.price}</p>}
+          </Link>
         ))}
-      </ul>
+      </div>
     </main>
   );
 }
