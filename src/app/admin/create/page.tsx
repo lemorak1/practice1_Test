@@ -80,6 +80,7 @@ export default function CreatePropertyPage() {
       }
     }
     if (photos.length) created.photos = photos;
+
     saveLocalProperty(created);
     router.push('/');
   }

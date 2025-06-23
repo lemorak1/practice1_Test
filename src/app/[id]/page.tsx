@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import type { Property } from '../types';
 import PhotoCarousel from '../components/PhotoCarousel';
 import { loadLocalProperties } from '../../lib/localProperties';
-
 export default function PropertyPage({ params }: any) {
   const id = Number(params.id);
   const [property, setProperty] = useState<Property | null>(null);

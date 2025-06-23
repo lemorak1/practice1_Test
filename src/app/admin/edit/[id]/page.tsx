@@ -96,6 +96,7 @@ export default function EditPropertyPage({ params }: any) {
     }
     if (photos.length) {
       updated.photos = (updated.photos || []).concat(photos);
+
     }
     saveLocalProperty(updated);
     router.push(`/${params.id}`);
