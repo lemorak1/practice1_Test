@@ -48,6 +48,7 @@ Si prefieres usar Firebase Data Connect (PostgreSQL), establece
 `DB_PROVIDER=firebase` y coloca la cadena de conexión de tu instancia en
 `DATABASE_URL`. Las variables de Supabase pueden quedar vacías.
 
+
 ## Comandos útiles
 
 - Iniciar el entorno de desarrollo:

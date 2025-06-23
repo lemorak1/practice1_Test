@@ -28,3 +28,4 @@ For complete setup instructions and environment variable details see
 `DATABASE_URL`, the app will attempt to create the required tables on first run;
 otherwise run the SQL in
 [docs/supabase_schema.sql](docs/supabase_schema.sql) manually.
+
