@@ -11,6 +11,10 @@ This Next.js application provides a minimal real estate listing platform. Listin
 # install dependencies
  npm install
 
+# copy environment variables template
+ cp .env.example .env
+# edit .env and adjust values as needed
+
 # run database migrations
  npx prisma migrate dev --name init
 
