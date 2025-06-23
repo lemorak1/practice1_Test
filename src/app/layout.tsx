@@ -1,9 +1,28 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { AppProvider } from '@/context/app-provider';
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from '@/components/ui/toaster';
 import { I18nProvider } from './i18n';
 import { cn } from '@/lib/utils';
+import localFont from 'next/font/local';
+
+const roboto = localFont({
+  src: [
+    { path: '../../public/fonts/Roboto-Regular.woff', weight: '400', style: 'normal' },
+    { path: '../../public/fonts/Roboto-Medium.woff', weight: '500', style: 'normal' },
+    { path: '../../public/fonts/Roboto-Bold.woff', weight: '700', style: 'normal' },
+  ],
+  variable: '--font-roboto',
+  display: 'swap',
+});
+
+const montserrat = localFont({
+  src: '../../public/fonts/Montserrat-Bold.woff',
+  weight: '700',
+  style: 'normal',
+  variable: '--font-montserrat',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Real Estate Hub',
@@ -16,13 +35,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
-      </head>
-      <body className={cn("font-body antialiased", "min-h-screen bg-background font-sans")}>
+    <html lang="en" suppressHydrationWarning className={`${roboto.variable} ${montserrat.variable}`}> 
+      <head />
+      <body className={cn('font-body antialiased', 'min-h-screen bg-background font-sans')}>
         <I18nProvider>
           <AppProvider>
             {children}
