@@ -13,10 +13,12 @@ A simple navigation bar links to the Home and Admin sections and lets users swit
  npm install
 
 # copy environment variables template
+
 cp .env.example .env
 # edit `.env` and set `DB_PROVIDER` to either `supabase` or `firebase`
 # then fill in the remaining connection details, including the
 # Firebase service account data used for photo uploads
+
 
 # start the development server
  npm run dev
@@ -33,3 +35,4 @@ otherwise run the SQL in
 
 When setting `FIREBASE_PRIVATE_KEY`, wrap the value in quotes and replace
 newlines with `\n` so it loads correctly.
+
