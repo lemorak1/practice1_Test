@@ -16,8 +16,19 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-    const { address } = data;
-    const property = await prisma.property.create({ data: { address } });
+    const {
+      address,
+      city,
+      state,
+      zip,
+      county,
+      price,
+      beds,
+      baths,
+    } = data;
+    const property = await prisma.property.create({
+      data: { address, city, state, zip, county, price, beds, baths },
+    });
     return NextResponse.json(property, { status: 201 });
   } catch (error) {
     console.error(error);

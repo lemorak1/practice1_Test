@@ -10,6 +10,13 @@ generator client {
 model Property {
   id          Int          @id @default(autoincrement())
   address     String
+  city        String?
+  state       String?
+  zip         String?
+  county      String?
+  price       Int?
+  beds        Int?
+  baths       Float?
   photos      Photo[]
   wholesalers Wholesaler[] @relation("PropertyWholesalers")
 }

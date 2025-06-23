@@ -7,6 +7,13 @@ export default function CreatePropertyPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [stateVal, setStateVal] = useState('');
+  const [zip, setZip] = useState('');
+  const [county, setCounty] = useState('');
+  const [price, setPrice] = useState('');
+  const [beds, setBeds] = useState('');
+  const [baths, setBaths] = useState('');
 
   if (status === 'loading') return <p>Loading...</p>;
   if (!session) {
@@ -25,7 +32,16 @@ export default function CreatePropertyPage() {
     const res = await fetch('/api/properties', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ address }),
+      body: JSON.stringify({
+        address,
+        city,
+        state: stateVal,
+        zip,
+        county,
+        price: price ? Number(price) : null,
+        beds: beds ? Number(beds) : null,
+        baths: baths ? parseFloat(baths) : null,
+      }),
     });
     if (res.ok) router.push('/');
   }
@@ -39,6 +55,52 @@ export default function CreatePropertyPage() {
           placeholder="Address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
+        />
+        <input
+          className="border p-2"
+          placeholder="City"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+        <input
+          className="border p-2"
+          placeholder="State"
+          value={stateVal}
+          onChange={(e) => setStateVal(e.target.value)}
+        />
+        <input
+          className="border p-2"
+          placeholder="ZIP"
+          value={zip}
+          onChange={(e) => setZip(e.target.value)}
+        />
+        <input
+          className="border p-2"
+          placeholder="County"
+          value={county}
+          onChange={(e) => setCounty(e.target.value)}
+        />
+        <input
+          className="border p-2"
+          placeholder="Price"
+          type="number"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        />
+        <input
+          className="border p-2"
+          placeholder="Beds"
+          type="number"
+          value={beds}
+          onChange={(e) => setBeds(e.target.value)}
+        />
+        <input
+          className="border p-2"
+          placeholder="Baths"
+          type="number"
+          step="0.5"
+          value={baths}
+          onChange={(e) => setBaths(e.target.value)}
         />
         <button className="bg-blue-500 text-white p-2" type="submit">
           Save
