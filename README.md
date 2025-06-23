@@ -15,7 +15,16 @@ textos en inglés y español.
 
 This project requires **Node.js 20**. Using other versions may cause `turbopack` to fail with errors like `turbo.createProject is not supported by the wasm bindings`.
 
+Use [nvm](https://github.com/nvm-sh/nvm) to ensure the correct version is active:
+
+```bash
+nvm install
+nvm use
+```
+
+Then run:
 1. Copy `.env.example` to `.env` and fill in your Firebase credentials.
 2. Install dependencies with `npm install`.
-3. Run the development server with `npm run dev`.
+3. Start the development server with `npm run dev`.
+
 
