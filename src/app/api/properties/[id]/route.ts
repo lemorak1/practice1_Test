@@ -22,9 +22,19 @@ export async function PUT(request: Request, { params }: any) {
   const id = Number(params.id);
   try {
     const data = await request.json();
+    const {
+      address,
+      city,
+      state,
+      zip,
+      county,
+      price,
+      beds,
+      baths,
+    } = data;
     const property = await prisma.property.update({
       where: { id },
-      data,
+      data: { address, city, state, zip, county, price, beds, baths },
     });
     return NextResponse.json(property);
   } catch (error) {
