@@ -1,0 +1,22 @@
+// Prisma schema for Property
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Property {
+  id          Int      @id @default(autoincrement())
+  title       String
+  address     String
+  city        String
+  state       String
+  price       Int
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
