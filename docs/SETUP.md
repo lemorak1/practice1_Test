@@ -40,6 +40,11 @@ Completa las variables de acuerdo al proveedor que elijas.
 npm run dev
 ```
 
+Para un recarga más rápida puedes usar el servidor experimental basado en Turbopack:
+```bash
+npm run dev:turbo
+```
+
 - Crear una versión optimizada para producción:
 
 ```bash
