@@ -13,6 +13,7 @@
     "@supabase/supabase-js": "^2.39.5",
     "i18next": "^25.2.1",
     "next": "13.5.1",
+
     "next-auth": "^4.24.11",
     "next-i18next": "^15.4.2",
     "pg": "^8.11.2",
@@ -32,5 +33,6 @@
     "typescript": "5.2.2",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1"
+
   }
 }
