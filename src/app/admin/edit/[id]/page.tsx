@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-dynamic';
 
 import { useApp } from '@/context/app-provider';
 import { Header } from '@/components/header';
