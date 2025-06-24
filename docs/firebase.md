@@ -18,6 +18,20 @@ NEXT_PUBLIC_FIREBASE_APP_ID="1:490617761948:web:a1235c3042d041f84a7d59"
 
 3. Ejecuta `npm run test:firebase` para probar la conexión. Si la configuración es correcta, verás en consola cuántas propiedades existen en la colección `properties`.
 
+4. Asegúrate de agregar el dominio de Firebase Storage en `next.config.js` o `next.config.ts` para poder mostrar imágenes externas en los componentes de Next.js:
+
+```js
+images: {
+  remotePatterns: [
+    {
+      protocol: 'https',
+      hostname: 'firebasestorage.googleapis.com',
+      pathname: '/**',
+    },
+  ],
+}
+```
+
 ## Almacenamiento de datos y fotos
 
 - **Firestore**: cada documento en la colección `properties` representa una casa con sus datos principales.

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { Home, Shield, UserSwitch } from 'lucide-react';
+import { Home, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
