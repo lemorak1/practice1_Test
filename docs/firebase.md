@@ -11,7 +11,7 @@ Esta aplicación usa [Firebase](https://firebase.google.com/) para persistir las
 NEXT_PUBLIC_FIREBASE_API_KEY="AIzaSyC3UeUz0MJB1uS-nPZaTV4qfkww_PpxQMI"
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="realstate-7417f.firebaseapp.com"
 NEXT_PUBLIC_FIREBASE_PROJECT_ID="realstate-7417f"
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="realstate-7417f.firebasestorage.app"
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="realstate-7417f.appspot.com"
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="490617761948"
 NEXT_PUBLIC_FIREBASE_APP_ID="1:490617761948:web:a1235c3042d041f84a7d59"
 ```
@@ -22,3 +22,13 @@ NEXT_PUBLIC_FIREBASE_APP_ID="1:490617761948:web:a1235c3042d041f84a7d59"
 
 - **Firestore**: cada documento en la colección `properties` representa una casa con sus datos principales.
 - **Firebase Storage**: las imágenes de las propiedades se guardan en el bucket configurado y cada documento de Firestore almacena la URL pública de la foto en el campo `imageUrl`.
+
+## CORS para Firebase Storage
+
+Si al subir una imagen ves un error de "CORS policy" en la consola del navegador, debes configurar las reglas CORS del bucket. Con `gcloud` o `gsutil` puedes aplicarlas usando el archivo `docs/storage-cors.json` incluido en este repositorio:
+
+```bash
+gsutil cors set docs/storage-cors.json gs://realstate-7417f.appspot.com
+```
+
+Actualiza la URL del bucket si tu proyecto usa otro nombre. Tras aplicar la política, las peticiones de la aplicación podrán subir archivos sin bloqueos de CORS.
