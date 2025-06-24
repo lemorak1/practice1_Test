@@ -42,6 +42,20 @@ Si continúas viendo "Upload failed" al intentar agregar una imagen, revisa que
 el valor de `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` sea correcto y que la política
 de CORS esté aplicada en tu bucket.
 
+## Resolver el error "Expected workStore to exist"
+
+En algunas versiones de Next.js puedes ver en la consola un mensaje como:
+
+```
+Invariant: Expected workStore to exist when handling searchParams in a client Page
+```
+
+Esto ocurre si un componente de página en modo cliente intenta leer `searchParams`
+usando `useParams` o `useSearchParams`. Asegúrate de recibir los parámetros como
+prop en la página (por ejemplo `export default function Edit({ params }) { ... }`)
+o de marcar la página como dinámica con `export const dynamic = 'force-dynamic'`.
+
+
 ## Reglas de seguridad
 
 Si obtienes un error de **"Missing or insufficient permissions"** al crear
@@ -68,4 +82,3 @@ service firebase.storage {
 ```
 
 Aplica reglas más restrictivas para producción según tus necesidades.
-
