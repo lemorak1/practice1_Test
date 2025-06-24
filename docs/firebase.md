@@ -42,3 +42,30 @@ Si continúas viendo "Upload failed" al intentar agregar una imagen, revisa que
 el valor de `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` sea correcto y que la política
 de CORS esté aplicada en tu bucket.
 
+## Reglas de seguridad
+
+Si obtienes un error de **"Missing or insufficient permissions"** al crear
+documentos o subir imágenes, revisa las reglas de seguridad de Firestore y
+Storage. Durante el desarrollo puedes usar reglas de prueba que permitan todas
+las operaciones:
+
+```bash
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if true;
+    }
+  }
+}
+```
+
+Aplica reglas más restrictivas para producción según tus necesidades.
+

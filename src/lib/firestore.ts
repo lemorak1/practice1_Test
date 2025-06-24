@@ -3,8 +3,14 @@ import { db } from './firebase';
 import type { Property } from './types';
 
 export async function createProperty(data: Omit<Property, 'id'>): Promise<string> {
-  const docRef = await addDoc(collection(db, 'properties'), data);
-  return docRef.id;
+  try {
+    const docRef = await addDoc(collection(db, 'properties'), data);
+    return docRef.id;
+  } catch (err) {
+    console.error('Firestore write failed:', err);
+    throw err;
+  }
+
 }
 
 export async function updatePropertyInDb(id: string, data: Omit<Property, 'id'>): Promise<void> {
