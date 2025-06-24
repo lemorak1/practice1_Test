@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-dynamic';
 
 // Force dynamic rendering to allow use of `useParams` in this client page
 export const dynamic = 'force-dynamic';
