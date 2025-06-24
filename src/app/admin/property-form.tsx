@@ -99,7 +99,6 @@ export function PropertyForm({ property }: PropertyFormProps) {
         toast({ title: 'Save failed', description: 'Unable to save property. Check Firebase permissions.' });
         return;
       }
-
     }
     router.push('/admin');
   }
