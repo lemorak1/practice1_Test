@@ -1,6 +1,9 @@
 'use client';
 export const dynamic = 'force-dynamic';
 
+// Ensure this page is treated as dynamic when using `useParams`
+export const dynamic = 'force-dynamic';
+
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { doc, getDoc, getFirestore } from 'firebase/firestore';
