@@ -1,5 +1,8 @@
 "use client";
 
+// Force dynamic rendering to allow use of `useParams` in this client page
+export const dynamic = 'force-dynamic';
+
 import { useApp } from '@/context/app-provider';
 import { Header } from '@/components/header';
 import { PropertyForm } from '../../property-form';
