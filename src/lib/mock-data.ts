@@ -14,6 +14,7 @@ export const mockProperties: Property[] = [
     amenities: ['Gym', 'Pool', 'Parking'],
     imageUrl: 'https://placehold.co/600x400.png',
     agent: {
+      id: 'agent1',
       name: 'Jane Doe',
       avatarUrl: 'https://placehold.co/100x100.png'
     }
@@ -31,6 +32,7 @@ export const mockProperties: Property[] = [
     amenities: ['Garage', 'Garden', 'Fireplace'],
     imageUrl: 'https://placehold.co/600x400.png',
     agent: {
+      id: 'agent2',
       name: 'John Smith',
       avatarUrl: 'https://placehold.co/100x100.png'
     }
@@ -48,6 +50,7 @@ export const mockProperties: Property[] = [
     amenities: ['Pool', 'Garage', 'Garden', 'Gym'],
     imageUrl: 'https://placehold.co/600x400.png',
     agent: {
+      id: 'agent3',
       name: 'Samantha Ray',
       avatarUrl: 'https://placehold.co/100x100.png'
     }
@@ -65,6 +68,7 @@ export const mockProperties: Property[] = [
     amenities: ['Gym', 'Parking'],
     imageUrl: 'https://placehold.co/600x400.png',
     agent: {
+      id: 'agent4',
       name: 'Mike Johnson',
       avatarUrl: 'https://placehold.co/100x100.png'
     }
@@ -82,6 +86,7 @@ export const mockProperties: Property[] = [
     amenities: ['Garden', 'Fireplace'],
     imageUrl: 'https://placehold.co/600x400.png',
     agent: {
+      id: 'agent5',
       name: 'Emily White',
       avatarUrl: 'https://placehold.co/100x100.png'
     }
@@ -99,6 +104,7 @@ export const mockProperties: Property[] = [
     amenities: ['Pool', 'Gym', 'Parking', 'Terrace'],
     imageUrl: 'https://placehold.co/600x400.png',
     agent: {
+      id: 'agent6',
       name: 'Jane Doe',
       avatarUrl: 'https://placehold.co/100x100.png'
     }

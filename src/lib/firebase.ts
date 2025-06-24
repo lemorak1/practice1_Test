@@ -1,5 +1,6 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app';
 import { getStorage, type FirebaseStorage } from 'firebase/storage';
+import { getFirestore, type Firestore } from 'firebase/firestore';
 
 // Replace with your project's actual environment variable names
 const firebaseConfig = {
@@ -16,5 +17,6 @@ const app: FirebaseApp = initializeApp(firebaseConfig);
 
 // Get a reference to the storage service
 const storage: FirebaseStorage = getStorage(app);
-
-export { app, storage };
+// Get a reference to Firestore
+const db: Firestore = getFirestore(app);
+export { app, storage, db };
