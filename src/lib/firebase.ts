@@ -19,5 +19,4 @@ const app: FirebaseApp = initializeApp(firebaseConfig);
 const storage: FirebaseStorage = getStorage(app);
 // Get a reference to Firestore
 const db: Firestore = getFirestore(app);
-
 export { app, storage, db };
