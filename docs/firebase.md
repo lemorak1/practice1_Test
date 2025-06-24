@@ -41,3 +41,4 @@ Actualiza la URL del bucket si tu proyecto usa otro nombre. Tras aplicar la pol�
 Si continúas viendo "Upload failed" al intentar agregar una imagen, revisa que
 el valor de `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` sea correcto y que la política
 de CORS esté aplicada en tu bucket.
+
