@@ -82,8 +82,9 @@ export function PropertyForm({ property }: PropertyFormProps) {
       } catch (err) {
         toast({
           title: 'Upload failed',
-          description: 'Image could not be uploaded. Check your bucket settings.'
+          description: 'Image could not be uploaded. Check your bucket settings'+err
         });
+
         return;
       }
     }

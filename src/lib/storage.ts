@@ -9,5 +9,6 @@ export async function uploadImage(file: File): Promise<string> {
     console.error('Firebase upload failed:', err)
     throw err
   }
+
   return getDownloadURL(storageRef)
 }
