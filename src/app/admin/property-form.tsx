@@ -2,6 +2,7 @@
 
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useApp } from '@/context/app-provider';
 import { useRouter } from 'next/navigation';
@@ -14,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import type { Property } from '@/lib/types';
+import { uploadImage } from '@/lib/storage';
 
 const formSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
@@ -43,6 +45,7 @@ export function PropertyForm({ property }: PropertyFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const isEditMode = !!property;
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -70,12 +73,22 @@ export function PropertyForm({ property }: PropertyFormProps) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (imageFile) {
+      try {
+        const url = await uploadImage(imageFile);
+        values.imageUrl = url;
+        form.setValue('imageUrl', url);
+      } catch (err) {
+        toast({ title: 'Upload failed', description: 'Image could not be uploaded' });
+        return;
+      }
+    }
     if (isEditMode) {
       updateProperty({ ...values, id: property.id });
       toast({ title: 'Property Updated!', description: 'The property details have been saved.' });
     } else {
-      addProperty(values);
+      await addProperty(values);
       toast({ title: 'Property Created!', description: 'The new property has been added to the listings.' });
     }
     router.push('/admin');
@@ -198,6 +211,14 @@ export function PropertyForm({ property }: PropertyFormProps) {
                     <FormMessage />
                 </FormItem>
             )} />
+
+            <FormItem>
+                <FormLabel>Upload Image</FormLabel>
+                <FormControl>
+                    <Input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
+                </FormControl>
+                <FormDescription>The selected image will be uploaded to Firebase</FormDescription>
+            </FormItem>
 
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <FormField control={form.control} name="agent.name" render={({ field }) => (
