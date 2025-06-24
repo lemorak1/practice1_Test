@@ -84,6 +84,7 @@ export function PropertyForm({ property }: PropertyFormProps) {
           title: 'Upload failed',
           description: 'Image could not be uploaded. Check your bucket settings.'
         });
+
         return;
       }
     }

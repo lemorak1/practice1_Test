@@ -68,3 +68,4 @@ service firebase.storage {
 ```
 
 Aplica reglas más restrictivas para producción según tus necesidades.
+
