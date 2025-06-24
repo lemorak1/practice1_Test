@@ -37,6 +37,7 @@ gsutil cors set docs/storage-cors.json gs://realstate-7417f.appspot.com
 ```
 
 Actualiza la URL del bucket si tu proyecto usa otro nombre. Tras aplicar la política, las peticiones de la aplicación podrán subir archivos sin bloqueos de CORS.
+
 Si continúas viendo "Upload failed" al intentar agregar una imagen, revisa que
 el valor de `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` sea correcto y que la política
 de CORS esté aplicada en tu bucket.
