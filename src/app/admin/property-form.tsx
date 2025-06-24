@@ -88,7 +88,7 @@ export function PropertyForm({ property }: PropertyFormProps) {
       updateProperty({ ...values, id: property.id });
       toast({ title: 'Property Updated!', description: 'The property details have been saved.' });
     } else {
-      addProperty(values);
+      await addProperty(values);
       toast({ title: 'Property Created!', description: 'The new property has been added to the listings.' });
     }
     router.push('/admin');
