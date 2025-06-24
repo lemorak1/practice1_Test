@@ -1,8 +1,13 @@
+'use client';
+
 import { Header } from '@/components/header';
-import { FilterSidebar } from '@/components/filter-sidebar';
 import { PropertyList } from '@/components/property-list';
+import { FilterSidebar } from '@/components/filter-sidebar';
+import { useApp } from '@/context/app-provider';
 
 export default function HomePage() {
+  const { filteredProperties } = useApp();
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />

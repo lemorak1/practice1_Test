@@ -1,5 +1,4 @@
 "use client"
-export const dynamic = 'force-dynamic'
 import { Header } from '@/components/header';
 import { PropertyForm } from '../property-form';
 import { useApp } from '@/context/app-provider';
