@@ -84,6 +84,7 @@ export function PropertyForm({ property }: PropertyFormProps) {
           title: 'Upload failed',
           description: 'Image could not be uploaded. Check your bucket settings.'
         });
+
         return;
       }
     }
@@ -98,6 +99,7 @@ export function PropertyForm({ property }: PropertyFormProps) {
         toast({ title: 'Save failed', description: 'Unable to save property. Check Firebase permissions.' });
         return;
       }
+
     }
     router.push('/admin');
   }

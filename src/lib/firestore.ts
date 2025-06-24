@@ -10,6 +10,7 @@ export async function createProperty(data: Omit<Property, 'id'>): Promise<string
     console.error('Firestore write failed:', err);
     throw err;
   }
+
 }
 
 export async function updatePropertyInDb(id: string, data: Omit<Property, 'id'>): Promise<void> {
