@@ -80,7 +80,11 @@ export function PropertyForm({ property }: PropertyFormProps) {
         values.imageUrl = url;
         form.setValue('imageUrl', url);
       } catch (err) {
-        toast({ title: 'Upload failed', description: 'Image could not be uploaded' });
+        toast({
+          title: 'Upload failed',
+          description: 'Image could not be uploaded. Check your bucket settings'+err
+        });
+
         return;
       }
     }
