@@ -3,13 +3,14 @@
 import React, { createContext, useContext, useState, useMemo, useEffect, ReactNode } from 'react';
 import type { Property, Filters } from '@/lib/types';
 import { mockProperties } from '@/lib/mock-data';
+import { createProperty } from '@/lib/firestore';
 
 const MAX_PRICE = 3000000;
 
 interface AppContextType {
   properties: Property[];
   setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
-  addProperty: (property: Omit<Property, 'id'>) => void;
+  addProperty: (property: Omit<Property, 'id'>) => Promise<void>;
   updateProperty: (property: Property) => void;
   deleteProperty: (id: string) => void;
   role: 'user' | 'admin';
@@ -37,10 +38,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<'user' | 'admin'>('user');
   const [filters, setFilters] = useState<Filters>(initialFilters);
 
-  const addProperty = (propertyData: Omit<Property, 'id'>) => {
+  const addProperty = async (propertyData: Omit<Property, 'id'>) => {
+    const id = await createProperty(propertyData);
     const newProperty: Property = {
       ...propertyData,
-      id: Date.now().toString(),
+      id,
     };
     setProperties(prev => [newProperty, ...prev]);
   };
