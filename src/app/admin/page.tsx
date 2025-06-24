@@ -40,8 +40,8 @@ export default function AdminDashboardPage() {
     }
   }, [role, router]);
   
-  const handleDelete = async (id: string) => {
-    await deleteProperty(id);
+  const handleDelete = (id: string) => {
+    deleteProperty(id);
     toast({
       title: "Property Deleted",
       description: "The property has been successfully removed.",

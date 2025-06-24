@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useMemo, useEffect, ReactNode } from 'react';
 import type { Property, Filters } from '@/lib/types';
 import { app } from '@/lib/firebase'; // Import the initialized Firebase app
-import { collection, getDocs, getFirestore, getDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, getFirestore, getDoc } from 'firebase/firestore';
 
 const MAX_PRICE = 3000000;
 
@@ -12,7 +12,7 @@ interface AppContextType {
   setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
   addProperty: (property: Omit<Property, 'id'>) => void;
   updateProperty: (property: Property) => void;
-  deleteProperty: (id: string) => Promise<void>;
+  deleteProperty: (id: string) => void;
   role: 'user' | 'admin';
   setRole: React.Dispatch<React.SetStateAction<'user' | 'admin'>>;
   filters: Filters;
@@ -88,14 +88,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setProperties(prev => prev.map(p => p.id === updatedProperty.id ? updatedProperty : p));
   };
 
-  const deleteProperty = async (id: string) => {
-    const db = getFirestore(app);
-    try {
-      await deleteDoc(doc(db, 'properties', id));
-      setProperties(prev => prev.filter(p => p.id !== id));
-    } catch (err) {
-      console.error('Failed to delete property from Firestore:', err);
-    }
+  const deleteProperty = (id: string) => {
+    setProperties(prev => prev.filter(p => p.id !== id));
   };
 
   const clearFilters = () => {
