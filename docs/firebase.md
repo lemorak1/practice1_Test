@@ -55,6 +55,7 @@ usando `useParams` o `useSearchParams`. Asegúrate de recibir los parámetros co
 prop en la página (por ejemplo `export default function Edit({ params }) { ... }`)
 o de marcar la página como dinámica con `export const dynamic = 'force-dynamic'`.
 
+
 ## Reglas de seguridad
 
 Si obtienes un error de **"Missing or insufficient permissions"** al crear
