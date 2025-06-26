@@ -34,14 +34,14 @@ export function Header() {
         </nav>
         <div className="flex flex-1 items-center justify-end gap-4">
             <div className="flex items-center space-x-2">
-                <Label htmlFor="role-switcher" className="text-sm font-medium">User</Label>
+                {/* <Label htmlFor="role-switcher" className="text-sm font-medium">User</Label>
                 <Switch
                     id="role-switcher"
                     checked={isAdmin}
                     onCheckedChange={(checked) => setRole(checked ? 'admin' : 'user')}
                     aria-label="Toggle admin mode"
                 />
-                <Label htmlFor="role-switcher" className="text-sm font-medium">Admin</Label>
+                <Label htmlFor="role-switcher" className="text-sm font-medium">Admin</Label> */}
             </div>
         </div>
       </div>
