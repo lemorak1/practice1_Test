@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { db } from '../src/lib/firebase';
+import { db } from './src/lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
 async function run() {
