@@ -1,5 +1,5 @@
 "use client";
-
+import React, { useState, useEffect } from 'react';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
@@ -14,6 +14,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
+import { storage, app } from '@/lib/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getFirestore, collection, addDoc, doc, updateDoc, getDocs } from 'firebase/firestore';
 import type { Property } from '@/lib/types';
 import { uploadImage } from '@/lib/storage';
 
@@ -29,11 +32,8 @@ const formSchema = z.object({
   amenities: z.array(z.string()).refine(value => value.some(item => item), {
     message: 'You have to select at least one amenity.',
   }),
-  imageUrl: z.string().url("Must be a valid URL"),
-  agent: z.object({
-      name: z.string().min(2, "Agent name is required"),
-      avatarUrl: z.string().url("Agent avatar must be a valid URL"),
-  })
+  imageUrl: z.string().optional(), // Make imageUrl optional initially,
+  agentId: z.string().min(1, "Agent is required"), // Store agent ID instead of full object
 });
 
 type PropertyFormProps = {
@@ -41,22 +41,31 @@ type PropertyFormProps = {
 };
 
 export function PropertyForm({ property }: PropertyFormProps) {
-  const { addProperty, updateProperty, amenitiesList } = useApp();
+  const { amenitiesList } = useApp(); // Removed addProperty and updateProperty as we'll use Firestore
   const router = useRouter();
   const { toast } = useToast();
+  const db = getFirestore(app); // Get Firestore instance
+  const [agents, setAgents] = useState<{ id: string; name: string }[]>([]); // State for agents
+  const [agentFilter, setAgentFilter] = useState(''); // State for agent filter input
   const isEditMode = !!property;
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: isEditMode ? {
-      ...property,
-      price: property.price,
-      bedrooms: property.bedrooms,
+      title: property?.title || '',
+      description: property?.description || '',
+      location: property?.location || '',
+      price: property?.price ?? 0,
+      bedrooms: property?.bedrooms ?? 1,
       bathrooms: property.bathrooms,
-      area: property.area
+      area: property?.area ?? 1000,
+      type: property?.type || 'House',
+      amenities: property?.amenities || [],
+      imageUrl: property?.imageUrl || '',
+      agentId: property?.agent?.id || '',
     } : {
-      title: '',
+      title: 'Modern Downtown Apartment',
       description: '',
       location: '',
       price: 0,
@@ -64,13 +73,11 @@ export function PropertyForm({ property }: PropertyFormProps) {
       bathrooms: 1,
       area: 1000,
       type: 'House',
-      amenities: [],
-      imageUrl: 'https://placehold.co/600x400.png',
-      agent: {
-          name: '',
-          avatarUrl: 'https://placehold.co/100x100.png'
-      }
+      amenities: ["Parking", "Gym"],
+      imageUrl: '', // Default empty for new properties
+      agentId: '', // Default empty
     },
+    mode: 'onBlur', // Add mode for validation on blur
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -98,8 +105,20 @@ export function PropertyForm({ property }: PropertyFormProps) {
         toast({ title: 'Save failed', description: 'Unable to save property. Check Firebase permissions.' });
         return;
       }
+
     }
     router.push('/admin');
+  }
+
+  async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      const storageRef = ref(storage, `property-images/${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      form.setValue('imageUrl', downloadURL);
+      toast({ title: 'Image Uploaded!', description: 'The image has been uploaded successfully.' });
+    }
   }
 
   return (
@@ -214,10 +233,23 @@ export function PropertyForm({ property }: PropertyFormProps) {
 
             <FormField control={form.control} name="imageUrl" render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Image URL</FormLabel>
-                    <FormControl><Input placeholder="https://placehold.co/600x400.png" {...field} /></FormControl>
-                    <FormMessage />
+                    <FormLabel>Property Image</FormLabel>
+                    {isEditMode && property?.imageUrl && (
+                      <div className="space-y-2">
+                        <img src={property.imageUrl} alt="Current property image" className="w-32 h-32 object-cover rounded-md" />
+                        <Input type="text" value={property.imageUrl} disabled className="text-sm text-muted-foreground" />
+                      </div>
+                    )}
+                    <FormControl>
+                      <Input type="file" accept="image/*" onChange={handleImageUpload} />
+                    </FormControl>
+                    <FormDescription>
+                      {isEditMode ? 'Upload a new image to replace the current one.' : 'Upload an image for the property.'}
+                    </FormDescription>
+ )
+
                 </FormItem>
+
             )} />
 
             <FormItem>
@@ -237,13 +269,35 @@ export function PropertyForm({ property }: PropertyFormProps) {
                     </FormItem>
                 )} />
                 <FormField control={form.control} name="agent.avatarUrl" render={({ field }) => (
+
                     <FormItem>
-                        <FormLabel>Agent Avatar URL</FormLabel>
-                        <FormControl><Input placeholder="https://placehold.co/100x100.png" {...field} /></FormControl>
+                        <FormLabel>Agent</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger onBlur={field.onBlur}>
+                                    <SelectValue placeholder="Select an agent" />
+                                </SelectTrigger>
+                            </FormControl>
+                            {/* Input for filtering agents */}
+                            <Input
+                                placeholder="Search agents..."
+                                value={agentFilter}
+                                onChange={(e) => setAgentFilter(e.target.value)}
+                                className="px-2 py-1"
+                                // Prevent the Select from closing when typing in the input
+                                onKeyDown={(e) => e.stopPropagation()}
+                                onClick={(e) => e.stopPropagation()}
+                            />
+
+                            <SelectContent>
+                                {agents.map((agent) => (
+                                    <SelectItem key={agent.id} value={agent.id}>{agent.name}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                         <FormMessage />
                     </FormItem>
                 )} />
-            </div>
 
             <div className="flex justify-end gap-4">
               <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>

@@ -1,12 +1,12 @@
 "use client";
 
-import { useApp } from '@/context/app-provider';
 import { PropertyCard } from './property-card';
 import { Card } from './ui/card';
+import { useApp } from '@/context/app-provider';
 
 export function PropertyList() {
   const { filteredProperties } = useApp();
-
+  
   return (
     <div>
         <h2 className="text-2xl font-bold mb-4 font-headline tracking-tight">

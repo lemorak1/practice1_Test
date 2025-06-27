@@ -1,8 +1,31 @@
 # Firebase Studio
 
-This is a NextJS starter in Firebase Studio.
+This is a Next.js starter generated with **Firebase Studio**.
 
-To get started, take a look at src/app/page.tsx.
+## Setup
 
-For detalles sobre conectar la aplicación a Firebase y cómo almacenar las fotos de las propiedades, consulta [docs/firebase.md](docs/firebase.md).
-La persistencia del rol de usuario se describe en [docs/roles.md](docs/roles.md).
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. Copy `.env.example` to `.env` and update the values with your Firebase
+   project credentials.
+
+3. Run the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+The repo also provides validation scripts:
+
+```bash
+npm run typecheck
+npm run lint
+npm run test:firebase
+```
+
+These should execute without errors once the environment is configured.
