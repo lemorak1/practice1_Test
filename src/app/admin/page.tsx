@@ -1,10 +1,10 @@
 "use client";
 export const dynamic = 'force-dynamic';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Link from 'next/link';
-import { useApp } from '@/context/app-provider';
-import { useRole } from '@/hooks/use-role';
+import { AppContext } from '@/context/app-provider';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -32,8 +32,8 @@ import { Header } from '@/components/header';
 import { useToast } from '@/hooks/use-toast';
 
 export default function AdminDashboardPage() {
-  const [role] = useRole();
-  const { properties, deleteProperty } = useApp();
+  const { role, properties, deleteProperty } = useContext(AppContext)!;
+
   const router = useRouter();
   const { toast } = useToast();
 
