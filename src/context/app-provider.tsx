@@ -22,7 +22,7 @@ interface AppContextType {
   amenitiesList: string[];
 }
 
-const AppContext = createContext<AppContextType | undefined>(undefined);
+export const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const initialFilters: Filters = {
   query: '',

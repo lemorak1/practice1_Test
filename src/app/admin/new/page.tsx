@@ -2,12 +2,13 @@
 export const dynamic = 'force-dynamic'
 import { Header } from '@/components/header';
 import { PropertyForm } from '../property-form';
-import { useApp } from '@/context/app-provider';
+import { useContext } from 'react';
+import { AppContext } from '@/context/app-provider';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function NewPropertyPage() {
-    const { role } = useApp();
+    const { role } = useContext(AppContext)!;
     const router = useRouter();
 
     useEffect(() => {

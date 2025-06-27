@@ -2,7 +2,8 @@
 
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { useApp } from '@/context/app-provider';
+import { useContext } from 'react';
+import { AppContext } from '@/context/app-provider';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -37,7 +38,7 @@ type PropertyFormProps = {
 };
 
 export function PropertyForm({ property }: PropertyFormProps) {
-  const { addProperty, updateProperty, amenitiesList } = useApp();
+  const { addProperty, updateProperty, amenitiesList } = useContext(AppContext)!;
   const router = useRouter();
   const { toast } = useToast();
   const isEditMode = !!property;

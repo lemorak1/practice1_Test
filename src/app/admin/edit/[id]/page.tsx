@@ -1,6 +1,7 @@
 "use client";
 
-import { useApp } from '@/context/app-provider';
+import { useContext } from 'react';
+import { AppContext } from '@/context/app-provider';
 import { Header } from '@/components/header';
 import { PropertyForm } from '../../property-form';
 import { useRouter } from 'next/navigation';
@@ -13,7 +14,7 @@ interface EditPropertyPageProps {
 }
 
 export default function EditPropertyPage({ params }: EditPropertyPageProps) {
-  const { role, properties } = useApp();
+  const { role, properties } = useContext(AppContext)!;
   const router = useRouter();
   const { id } = params;
   const [property, setProperty] = useState<Property | undefined>(undefined);
