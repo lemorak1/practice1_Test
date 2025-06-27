@@ -59,6 +59,7 @@ o de marcar la página como dinámica con `export const dynamic = 'force-dynamic
 Si el problema persiste, puedes cambiar a **Next.js 15.2.5**, que en pruebas se ha
 comportado de manera más estable.
 
+
 ## Carpeta `.idx` y "workspace"
 
 Si descargaste este proyecto desde Firebase Studio, encontrarás un directorio

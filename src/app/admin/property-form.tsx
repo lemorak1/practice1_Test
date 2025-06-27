@@ -1,10 +1,9 @@
 "use client";
 
-import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useApp } from '@/context/app-provider';
+import { useContext } from 'react';
+import { AppContext } from '@/context/app-provider';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,38 +16,35 @@ import { Checkbox } from '@/components/ui/checkbox';
 import type { Property } from '@/lib/types';
 import { uploadImage } from '@/lib/storage';
 
-const formSchema = z.object({
-  title: z.string().min(5, "Title must be at least 5 characters"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
-  location: z.string().min(2, "Location is required"),
-  price: z.coerce.number().min(0, "Price must be a positive number"),
-  bedrooms: z.coerce.number().int().min(1, "Must have at least 1 bedroom"),
-  bathrooms: z.coerce.number().int().min(1, "Must have at least 1 bathroom"),
-  area: z.coerce.number().min(100, "Area must be at least 100 sqft"),
-  type: z.enum(['House', 'Apartment', 'Condo', 'Villa']),
-  amenities: z.array(z.string()).refine(value => value.some(item => item), {
-    message: 'You have to select at least one amenity.',
-  }),
-  imageUrl: z.string().url("Must be a valid URL"),
-  agent: z.object({
-      name: z.string().min(2, "Agent name is required"),
-      avatarUrl: z.string().url("Agent avatar must be a valid URL"),
-  })
-});
+interface PropertyFormData {
+  title: string;
+  description: string;
+  location: string;
+  price: number;
+  bedrooms: number;
+  bathrooms: number;
+  area: number;
+  type: 'House' | 'Apartment' | 'Condo' | 'Villa';
+  amenities: string[];
+  imageUrl: string;
+  agent: {
+    name: string;
+    avatarUrl: string;
+  };
+}
 
 type PropertyFormProps = {
   property?: Property;
 };
 
 export function PropertyForm({ property }: PropertyFormProps) {
-  const { addProperty, updateProperty, amenitiesList } = useApp();
+  const { addProperty, updateProperty, amenitiesList } = useContext(AppContext)!;
   const router = useRouter();
   const { toast } = useToast();
   const isEditMode = !!property;
   const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<PropertyFormData>({
     defaultValues: isEditMode ? {
       ...property,
       price: property.price,
@@ -73,11 +69,19 @@ export function PropertyForm({ property }: PropertyFormProps) {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: PropertyFormData) {
+    const parsedValues = {
+      ...values,
+      price: Number(values.price),
+      bedrooms: Number(values.bedrooms),
+      bathrooms: Number(values.bathrooms),
+      area: Number(values.area)
+    };
+
     if (imageFile) {
       try {
         const url = await uploadImage(imageFile);
-        values.imageUrl = url;
+        parsedValues.imageUrl = url;
         form.setValue('imageUrl', url);
       } catch (err) {
         toast({
@@ -88,11 +92,11 @@ export function PropertyForm({ property }: PropertyFormProps) {
       }
     }
     if (isEditMode) {
-      updateProperty({ ...values, id: property.id });
+      updateProperty({ ...parsedValues, id: property.id });
       toast({ title: 'Property Updated!', description: 'The property details have been saved.' });
     } else {
       try {
-        await addProperty(values);
+        await addProperty(parsedValues);
         toast({ title: 'Property Created!', description: 'The new property has been added to the listings.' });
       } catch (err) {
         toast({ title: 'Save failed', description: 'Unable to save property. Check Firebase permissions.' });
