@@ -3,15 +3,18 @@
 import { useApp } from '@/context/app-provider';
 import { Header } from '@/components/header';
 import { PropertyForm } from '../../property-form';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { Property } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function EditPropertyPage() {
+interface EditPropertyPageProps {
+  params: { id: string };
+}
+
+export default function EditPropertyPage({ params }: EditPropertyPageProps) {
   const { role, properties } = useApp();
   const router = useRouter();
-  const params = useParams();
   const { id } = params;
   const [property, setProperty] = useState<Property | undefined>(undefined);
   const [loading, setLoading] = useState(true);
