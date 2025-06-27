@@ -1,10 +1,8 @@
 "use client";
 export const dynamic = 'force-dynamic';
 
-
-import { useContext } from 'react';
-import { AppContext } from '@/context/app-provider';
-
+import { useApp } from '@/context/app-provider';
+import { useRole } from '@/hooks/use-role';
 
 import { Header } from '@/components/header';
 import { PropertyForm } from '../../property-form';
@@ -18,7 +16,8 @@ interface EditPropertyPageProps {
 }
 
 export default function EditPropertyPage({ params }: EditPropertyPageProps) {
-  const { role, properties } = useContext(AppContext)!;
+  const [role] = useRole();
+  const { properties } = useApp();
 
   const router = useRouter();
   const { id } = params;

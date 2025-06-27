@@ -3,7 +3,8 @@ export const dynamic = 'force-dynamic';
 
 import React, { useEffect, useContext } from 'react';
 import Link from 'next/link';
-import { AppContext } from '@/context/app-provider';
+import { useApp } from '@/context/app-provider';
+import { useRole } from '@/hooks/use-role';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -32,7 +33,8 @@ import { Header } from '@/components/header';
 import { useToast } from '@/hooks/use-toast';
 
 export default function AdminDashboardPage() {
-  const { role, properties, deleteProperty } = useContext(AppContext)!;
+  const [role] = useRole();
+  const { properties, deleteProperty } = useApp();
 
   const router = useRouter();
   const { toast } = useToast();
