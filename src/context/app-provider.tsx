@@ -2,15 +2,15 @@
 
 import React, { createContext, useContext, useState, useMemo, useEffect, ReactNode } from 'react';
 import type { Property, Filters } from '@/lib/types';
-import { mockProperties } from '@/lib/mock-data';
-import { createProperty } from '@/lib/firestore';
+import { app } from '@/lib/firebase'; // Import the initialized Firebase app
+import { collection, getDocs, getFirestore, getDoc } from 'firebase/firestore';
 
 const MAX_PRICE = 3000000;
 
 interface AppContextType {
   properties: Property[];
   setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
-  addProperty: (property: Omit<Property, 'id'>) => Promise<void>;
+  addProperty: (property: Omit<Property, 'id'>) => void;
   updateProperty: (property: Property) => void;
   deleteProperty: (id: string) => void;
   role: 'user' | 'admin';
@@ -22,7 +22,7 @@ interface AppContextType {
   amenitiesList: string[];
 }
 
-export const AppContext = createContext<AppContextType | undefined>(undefined);
+const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const initialFilters: Filters = {
   query: '',
@@ -34,15 +34,52 @@ const initialFilters: Filters = {
 };
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [properties, setProperties] = useState<Property[]>(mockProperties);
+  const [properties, setProperties] = useState<Property[]>([]);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      const db = getFirestore(app); // Pass the initialized app to getFirestore()
+      const propertiesCollection = collection(db, 'properties');
+      const propertySnapshot = await getDocs(propertiesCollection);
+
+      const propertiesData = await Promise.all(propertySnapshot.docs.map(async (doc) => {
+        const propertyData = doc.data();
+        
+        // Explicitly pick fields from propertyData that match the Property type (excluding agentRef)
+        const property: Property = {
+          id: doc.id,
+          amenities: propertyData.amenities || [],
+          area: propertyData.area || 0,
+          bathrooms: propertyData.bathrooms || 0,
+          bedrooms: propertyData.bedrooms || 0,
+          description: propertyData.description || '',
+          imageUrl: propertyData.imageUrl || '',
+          location: propertyData.location || '',
+          price: propertyData.price || 0,
+          title: propertyData.title || '',
+          type: propertyData.type || '',
+          agent: undefined, // Initialize agent as undefined
+        };
+
+        if (propertyData.agentRef) {
+          const agentDoc = await getDoc(propertyData.agentRef);
+          if (agentDoc.exists()) {
+            property.agent = { id: agentDoc.id, ...(agentDoc.data() as any) }; // Cast agent data as any for now
+          }
+        }
+        return property;
+      }));
+      setProperties(propertiesData);
+    };
+    fetchProperties();
+  }, []);
   const [role, setRole] = useState<'user' | 'admin'>('user');
   const [filters, setFilters] = useState<Filters>(initialFilters);
 
-  const addProperty = async (propertyData: Omit<Property, 'id'>) => {
-    const id = await createProperty(propertyData);
+  const addProperty = (propertyData: Omit<Property, 'id'>) => {
     const newProperty: Property = {
       ...propertyData,
-      id,
+      id: Date.now().toString(),
     };
     setProperties(prev => [newProperty, ...prev]);
   };

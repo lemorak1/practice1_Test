@@ -2,7 +2,6 @@
 
 ## Core Features:
 
-
 - Property Listing: Display a list of real estate properties with key information like price, location, and number of bedrooms.
 - Advanced Filtering: Implement a comprehensive filtering system allowing users to narrow down properties based on criteria such as price range, location, property type, number of bedrooms/bathrooms, and other amenities.
 - CRUD Management (Admin): Admin users can create, read, update, and delete property listings through a dedicated content management interface.

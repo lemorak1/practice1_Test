@@ -10,9 +10,15 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 import type { Filters } from '@/lib/types';
+import { useEffect, useState } from 'react';
 
 export function FilterSidebar() {
   const { filters, setFilters, clearFilters, amenitiesList } = useApp();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleFilterChange = <K extends keyof Filters>(key: K, value: Filters[K]) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -40,7 +46,11 @@ export function FilterSidebar() {
 
         <div className="space-y-2">
           <Label>Price Range</Label>
-          <p className="text-sm text-muted-foreground">${filters.priceRange[0].toLocaleString()} - ${filters.priceRange[1].toLocaleString()}</p>
+          <p className="text-sm text-muted-foreground">
+            {isClient
+              ? `$${filters.priceRange[0].toLocaleString()} - $${filters.priceRange[1].toLocaleString()}`
+              : `$${filters.priceRange[0]} - $${filters.priceRange[1]}`}
+          </p>
           <Slider
             min={0}
             max={MAX_PRICE}

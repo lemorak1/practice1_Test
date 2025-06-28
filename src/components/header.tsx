@@ -1,15 +1,15 @@
 "use client";
 
 import Link from 'next/link';
-import { Home, Shield } from 'lucide-react';
+import { Home, Shield, UserSwitch } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { useRole } from '@/hooks/use-role';
+import { useApp } from '@/context/app-provider';
 import { cn } from '@/lib/utils';
 
 export function Header() {
-  const [role, setRole] = useRole();
+  const { role, setRole } = useApp();
   const isAdmin = role === 'admin';
 
   return (
@@ -33,20 +33,16 @@ export function Header() {
           )}
         </nav>
         <div className="flex flex-1 items-center justify-end gap-4">
-          <div className="flex items-center space-x-2">
-            <Label htmlFor="role-switcher" className="text-sm font-medium">
-              User
-            </Label>
-            <Switch
-              id="role-switcher"
-              checked={isAdmin}
-              onCheckedChange={(checked) => setRole(checked ? 'admin' : 'user')}
-              aria-label="Toggle admin mode"
-            />
-            <Label htmlFor="role-switcher" className="text-sm font-medium">
-              Admin
-            </Label>
-          </div>
+            <div className="flex items-center space-x-2">
+                <Label htmlFor="role-switcher" className="text-sm font-medium">User</Label>
+                <Switch
+                    id="role-switcher"
+                    checked={isAdmin}
+                    onCheckedChange={(checked) => setRole(checked ? 'admin' : 'user')}
+                    aria-label="Toggle admin mode"
+                />
+                <Label htmlFor="role-switcher" className="text-sm font-medium">Admin</Label>
+            </div>
         </div>
       </div>
     </header>
