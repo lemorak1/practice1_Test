@@ -22,12 +22,14 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+
       {
         protocol: 'https',
         hostname: 'realstate-7417f.firebasestorage.app',
         port: '',
         pathname: '/**',
       },
+
     ],
   },
 };

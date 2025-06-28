@@ -9,11 +9,14 @@ export interface Property {
   area: number; // in sqft
   type: 'House' | 'Apartment' | 'Condo' | 'Villa';
   amenities: string[];
-  imageUrl: string;
-  agent: {
-    name: string;
-    avatarUrl: string;
-  };
+  imageUrl: string; // Main image URL
+  agent?: Agent; // Agent data
+}
+
+export interface Agent {
+  id: string;
+  name: string;
+  avatarUrl: string; // URL to the agent's avatar image
 }
 
 export interface Filters {
