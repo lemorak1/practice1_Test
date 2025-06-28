@@ -49,12 +49,20 @@ En algunas versiones de Next.js puedes ver en la consola un mensaje como:
 ```
 Invariant: Expected workStore to exist when handling searchParams in a client Page
 ```
+Nota que el mensaje se refiere a **workStore**, no a "workspace".
 
 Esto ocurre si un componente de página en modo cliente intenta leer `searchParams`
 usando `useParams` o `useSearchParams`. Asegúrate de recibir los parámetros como
 prop en la página (por ejemplo `export default function Edit({ params }) { ... }`)
-o de marcar la página como dinámica con `export const dynamic = 'force-dynamic'`.
+o de marcar la página como dinámica con `export const dynamic = 'force-dynamic'`
 
+## Carpeta `.idx` y "workspace"
+
+Si descargaste este proyecto desde Firebase Studio, encontrarás un directorio
+oculto llamado `.idx`. Dicho directorio solo almacena la configuración del IDE y
+no interviene en la compilación. Puedes eliminarlo sin problemas: el comando
+`npm run build` seguirá funcionando y no depende de ningún "daemon" o
+"workspace" especial.
 
 ## Reglas de seguridad
 
