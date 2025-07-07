@@ -73,7 +73,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     };
     fetchProperties();
   }, []);
-  const [role, setRole] = useState<'user' | 'admin'>('user');
+  const [role, setRole] = useState<'user' | 'admin'>('admin');
   const [filters, setFilters] = useState<Filters>(initialFilters);
 
   const addProperty = (propertyData: Omit<Property, 'id'>) => {
